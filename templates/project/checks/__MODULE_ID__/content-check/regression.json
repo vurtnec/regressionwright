@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "content-check-regression",
+  "module": "__MODULE_ID__",
+  "stage": "content-check",
+  "checks": "regression",
+  "description": "Regression assertion for content-check variants.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["contentChecks"],
+        "properties": {
+          "contentChecks": {
+            "type": "object",
+            "required": ["default"],
+            "properties": {
+              "default": {
+                "type": "object",
+                "required": ["checked", "matchedHeading", "matchedLinkText"],
+                "properties": {
+                  "checked": { "const": true },
+                  "matchedHeading": { "type": "string", "minLength": 1 },
+                  "matchedLinkText": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

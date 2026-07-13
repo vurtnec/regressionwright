@@ -1,0 +1,17 @@
+{
+  "id": "health-check-default",
+  "stage": "health-check",
+  "variant": "default",
+  "dataKey": "healthCheck",
+  "contractPath": "contracts/__MODULE_ID__/health-check-default.json",
+  "implementationPath": "tests/__MODULE_ID__/stages/health-check.mjs",
+  "defaultInput": "default",
+  "defaultChecks": "smoke",
+  "executor": {
+    "type": "playwright",
+    "specPath": "tests/__MODULE_ID__/pipeline-runner.mjs",
+    "registryPath": "tests/__MODULE_ID__/pipeline-runner.mjs"
+  },
+  "tags": ["starter", "health-check"],
+  "status": "starter"
+}

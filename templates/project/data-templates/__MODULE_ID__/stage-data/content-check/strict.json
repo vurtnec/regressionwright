@@ -1,0 +1,8 @@
+{
+  "expectedLinkText": "Learn more",
+  "expectedDestinationUrlContains": "iana.org/help/example-domains",
+  "expectedDestinationTitleContains": "Example Domains",
+  "expectedDestinationHeading": "Example Domains",
+  "expectedDestinationBodyText": "IANA-managed Reserved Domains",
+  "expectedNavLinks": ["Domains", "Protocols", "Numbers", "About"]
+}

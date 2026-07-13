@@ -1,0 +1,17 @@
+{
+  "id": "content-check-strict",
+  "stage": "content-check",
+  "variant": "strict",
+  "dataKey": "strictContentCheck",
+  "contractPath": "contracts/__MODULE_ID__/content-check-strict.json",
+  "implementationPath": "tests/__MODULE_ID__/stages/content-check.mjs",
+  "defaultInput": "strict",
+  "defaultChecks": "full-regression",
+  "executor": {
+    "type": "playwright",
+    "specPath": "tests/__MODULE_ID__/pipeline-runner.mjs",
+    "registryPath": "tests/__MODULE_ID__/pipeline-runner.mjs"
+  },
+  "tags": ["starter", "content-check", "variant-strict"],
+  "status": "starter"
+}

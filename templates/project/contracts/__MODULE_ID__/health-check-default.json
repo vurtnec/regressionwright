@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "health-check-default",
+  "module": "__MODULE_ID__",
+  "name": "Health Check",
+  "description": "Open the configured base URL and verify the page title contains the expected text.",
+  "executor": "playwright",
+  "mode": "e2e",
+  "requires": ["input.healthCheck"],
+  "produces": ["state.healthCheck.checked=true"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["baseUrl", "expectedTitleContains"],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "expectedTitleContains": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["healthCheck"],
+        "properties": {
+          "healthCheck": {
+            "type": "object",
+            "required": ["checked", "title", "url"],
+            "properties": {
+              "checked": {
+                "const": true
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Opens the configured base URL with Playwright."],
+  "evidence": ["screenshot", "trace", "current URL"]
+}

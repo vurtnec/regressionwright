@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "content-check-default",
+  "module": "__MODULE_ID__",
+  "name": "Content Check",
+  "description": "Verify the starter page heading, body text, and primary link.",
+  "executor": "playwright",
+  "mode": "e2e",
+  "requires": ["state.healthCheck.checked=true", "input.contentCheck"],
+  "produces": ["state.contentChecks.default.checked=true"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["expectedHeading", "expectedText", "expectedLinkText"],
+    "properties": {
+      "expectedHeading": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedText": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedLinkText": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["contentChecks"],
+        "properties": {
+          "contentChecks": {
+            "type": "object",
+            "required": ["default"],
+            "properties": {
+              "default": {
+                "type": "object",
+                "required": ["checked", "matchedText", "matchedHeading", "matchedLinkText", "title", "url"],
+                "properties": {
+                  "checked": { "const": true },
+                  "matchedText": { "type": "string", "minLength": 1 },
+                  "matchedHeading": { "type": "string", "minLength": 1 },
+                  "matchedLinkText": { "type": "string", "minLength": 1 },
+                  "title": { "type": "string", "minLength": 1 },
+                  "url": { "type": "string", "format": "uri" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Reads the current page after the health-check stage opened the site."],
+  "evidence": ["screenshot", "trace", "current URL"]
+}

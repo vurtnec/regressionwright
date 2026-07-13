@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "summary-check-regression",
+  "module": "__MODULE_ID__",
+  "stage": "summary-check",
+  "checks": "regression",
+  "description": "Regression assertion for composed-input summary check.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["summaryCheck"],
+        "properties": {
+          "summaryCheck": {
+            "type": "object",
+            "required": ["checked", "contentChecksPassed"],
+            "properties": {
+              "checked": { "const": true },
+              "contentChecksPassed": { "type": "integer" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

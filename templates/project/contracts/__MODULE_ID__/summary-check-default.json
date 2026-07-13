@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "summary-check-default",
+  "module": "__MODULE_ID__",
+  "name": "Summary Check",
+  "description": "Verify composed stage input and previous stage outputs after all starter checks pass.",
+  "executor": "playwright",
+  "mode": "e2e",
+  "requires": [
+    "state.healthCheck.checked=true",
+    "state.contentChecks.default.checked=true",
+    "state.contentChecks.strict.checked=true",
+    "input.healthCheck",
+    "input.contentCheck",
+    "input.strictContentCheck"
+  ],
+  "produces": ["state.summaryCheck.checked=true"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["healthCheck", "contentCheck", "strictContentCheck"],
+    "properties": {
+      "healthCheck": {
+        "type": "object",
+        "required": ["baseUrl", "expectedTitleContains"],
+        "properties": {
+          "baseUrl": { "type": "string", "format": "uri" },
+          "expectedTitleContains": { "type": "string", "minLength": 1 }
+        }
+      },
+      "contentCheck": {
+        "type": "object",
+        "required": ["expectedHeading", "expectedText", "expectedLinkText"],
+        "properties": {
+          "expectedHeading": { "type": "string", "minLength": 1 },
+          "expectedText": { "type": "string", "minLength": 1 },
+          "expectedLinkText": { "type": "string", "minLength": 1 }
+        }
+      },
+      "strictContentCheck": {
+        "type": "object",
+        "required": [
+          "expectedLinkText",
+          "expectedDestinationUrlContains",
+          "expectedDestinationTitleContains",
+          "expectedDestinationHeading",
+          "expectedDestinationBodyText",
+          "expectedNavLinks"
+        ],
+        "properties": {
+          "expectedLinkText": { "type": "string", "minLength": 1 },
+          "expectedDestinationUrlContains": { "type": "string", "minLength": 1 },
+          "expectedDestinationTitleContains": { "type": "string", "minLength": 1 },
+          "expectedDestinationHeading": { "type": "string", "minLength": 1 },
+          "expectedDestinationBodyText": { "type": "string", "minLength": 1 },
+          "expectedNavLinks": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["summaryCheck"],
+        "properties": {
+          "summaryCheck": {
+            "type": "object",
+            "required": ["checked", "siteUrl", "contentChecksPassed"],
+            "properties": {
+              "checked": { "const": true },
+              "siteUrl": { "type": "string", "format": "uri" },
+              "contentChecksPassed": { "type": "integer" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Reads composed input and prior run state only."],
+  "evidence": ["run-context.json"]
+}

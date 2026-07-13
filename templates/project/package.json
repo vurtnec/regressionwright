@@ -1,0 +1,19 @@
+{
+  "name": "__PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "regressionwright": "regressionwright",
+    "harness": "regressionwright",
+    "daily": "regressionwright daily",
+    "check": "tsc --noEmit",
+    "playwright:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@regressionwright/core": "__CORE_PACKAGE_SPECIFIER__",
+    "@playwright/test": "1.60.0",
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.3"
+  }
+}

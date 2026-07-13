@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "health-check-regression",
+  "module": "__MODULE_ID__",
+  "stage": "health-check",
+  "checks": "regression",
+  "description": "Regression-level assertion for the starter health check.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["healthCheck"],
+        "properties": {
+          "healthCheck": {
+            "type": "object",
+            "required": ["checked"],
+            "properties": {
+              "checked": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

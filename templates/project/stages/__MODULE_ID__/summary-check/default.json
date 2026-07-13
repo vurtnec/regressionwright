@@ -1,0 +1,16 @@
+{
+  "id": "summary-check-default",
+  "stage": "summary-check",
+  "variant": "default",
+  "dataKeys": ["healthCheck", "contentCheck", "strictContentCheck"],
+  "contractPath": "contracts/__MODULE_ID__/summary-check-default.json",
+  "implementationPath": "tests/__MODULE_ID__/stages/summary-check.mjs",
+  "defaultChecks": "regression",
+  "executor": {
+    "type": "playwright",
+    "specPath": "tests/__MODULE_ID__/pipeline-runner.mjs",
+    "registryPath": "tests/__MODULE_ID__/pipeline-runner.mjs"
+  },
+  "tags": ["starter", "summary", "composed-input"],
+  "status": "starter"
+}

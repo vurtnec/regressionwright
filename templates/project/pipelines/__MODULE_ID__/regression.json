@@ -1,0 +1,36 @@
+{
+  "id": "__MODULE_ID__-regression",
+  "name": "__MODULE_ID__ Regression",
+  "description": "Starter regression pipeline for __MODULE_ID__.",
+  "module": "__MODULE_ID__",
+  "stages": [
+    {
+      "stage": "health-check",
+      "variant": "default",
+      "input": "default",
+      "checks": "regression",
+      "resumeBoundary": true,
+      "pipelineDefault": true
+    },
+    {
+      "stage": "content-check",
+      "variant": "default",
+      "input": "default",
+      "checks": "regression",
+      "pipelineDefault": true
+    },
+    {
+      "stage": "content-check",
+      "variant": "strict",
+      "input": "strict",
+      "checks": "full-regression",
+      "pipelineDefault": true
+    },
+    {
+      "stage": "summary-check",
+      "variant": "default",
+      "checks": "regression",
+      "pipelineDefault": true
+    }
+  ]
+}

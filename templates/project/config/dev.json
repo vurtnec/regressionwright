@@ -1,0 +1,12 @@
+{
+  "name": "dev",
+  "__MODULE_ID__": {
+    "defaultSite": "default",
+    "sites": {
+      "default": {
+        "baseUrl": "https://example.com",
+        "expectedTitleContains": "Example"
+      }
+    }
+  }
+}

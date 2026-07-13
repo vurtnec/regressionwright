@@ -1,0 +1,17 @@
+artifacts/
+test-results/
+playwright-report/
+.auth/
+.playwright-cli/
+node_modules/
+
+*.tgz
+coverage/
+dist/
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+*.drawio.bkp

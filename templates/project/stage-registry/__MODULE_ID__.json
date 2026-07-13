@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "module": "__MODULE_ID__",
+  "description": "__MODULE_ID__ deterministic E2E stage registry.",
+  "stageDefinitions": [
+    "stages/__MODULE_ID__/health-check/default.json",
+    "stages/__MODULE_ID__/content-check/default.json",
+    "stages/__MODULE_ID__/content-check/strict.json",
+    "stages/__MODULE_ID__/summary-check/default.json"
+  ]
+}

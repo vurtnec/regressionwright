@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "content-check-full-regression",
+  "module": "__MODULE_ID__",
+  "stage": "content-check",
+  "checks": "full-regression",
+  "description": "Full regression assertion for the strict content-check variant.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["contentChecks"],
+        "properties": {
+          "contentChecks": {
+            "type": "object",
+            "required": ["strict"],
+            "properties": {
+              "strict": {
+                "type": "object",
+                "required": ["checked", "destinationUrl", "destinationHeading", "navLinksMatched"],
+                "properties": {
+                  "checked": { "const": true },
+                  "destinationUrl": { "type": "string", "format": "uri" },
+                  "destinationHeading": { "type": "string", "minLength": 1 },
+                  "navLinksMatched": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "type": "string", "minLength": 1 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "content-check-strict",
+  "module": "__MODULE_ID__",
+  "name": "Strict Content Check",
+  "description": "Click the starter page Learn more link and verify the destination page.",
+  "executor": "playwright",
+  "mode": "e2e",
+  "requires": ["state.contentChecks.default.checked=true", "input.strictContentCheck"],
+  "produces": ["state.contentChecks.strict.checked=true"],
+  "inputSchema": {
+    "type": "object",
+    "required": [
+      "expectedLinkText",
+      "expectedDestinationUrlContains",
+      "expectedDestinationTitleContains",
+      "expectedDestinationHeading",
+      "expectedDestinationBodyText",
+      "expectedNavLinks"
+    ],
+    "properties": {
+      "expectedLinkText": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedDestinationUrlContains": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedDestinationTitleContains": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedDestinationHeading": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedDestinationBodyText": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expectedNavLinks": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["contentChecks"],
+        "properties": {
+          "contentChecks": {
+            "type": "object",
+            "required": ["strict"],
+            "properties": {
+              "strict": {
+                "type": "object",
+                "required": [
+                  "checked",
+                  "clickedLinkText",
+                  "destinationUrl",
+                  "destinationTitle",
+                  "destinationHeading",
+                  "destinationTextMatched",
+                  "navLinksMatched"
+                ],
+                "properties": {
+                  "checked": { "const": true },
+                  "clickedLinkText": { "type": "string", "minLength": 1 },
+                  "destinationUrl": { "type": "string", "format": "uri" },
+                  "destinationTitle": { "type": "string", "minLength": 1 },
+                  "destinationHeading": { "type": "string", "minLength": 1 },
+                  "destinationTextMatched": { "type": "string", "minLength": 1 },
+                  "navLinksMatched": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "type": "string", "minLength": 1 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Clicks the Learn more link and navigates to the IANA example domains page."],
+  "evidence": ["screenshot", "trace", "current URL"]
+}
