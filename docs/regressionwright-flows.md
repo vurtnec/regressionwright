@@ -102,7 +102,7 @@ sequenceDiagram
   D->>E: apply dataProfile overrides
   D-->>F: write input.json
   P-->>F: write plan.json
-  C->>R: start Playwright run
+  C->>R: dispatch selected Playwright or Appium executor
   R->>M: create project runner
   loop each planned stage
     R->>V: validate stage input

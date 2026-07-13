@@ -14,7 +14,7 @@ A stage is a deterministic workflow node with:
 - Metadata: requirements, produced outputs, side effects, tags, implementation path, and contract path.
 - Contract: `inputSchema`, `outputSchema`, and `errorSchema`.
 - Check set: optional extra output assertions for a named coverage level, stored outside the executor.
-- Executor: deterministic code, usually Playwright for E2E UI.
+- Executor: deterministic Playwright code for web or Appium/WebdriverIO code for native mobile.
 
 Pipeline composition should reference `stage` + `variant` where possible. Exact stage ids are acceptable for temporary flows.
 
@@ -69,11 +69,12 @@ Each failed stage should emit a structured error matching its `errorSchema`.
 Include evidence paths when available:
 
 - Run directory.
-- Playwright output directory.
+- Executor output directory (`playwright` or `appium`).
 - Screenshot.
 - Trace.
 - Video.
 - Current URL.
+- Appium session id and device/platform details when applicable.
 - Primary selector or business identifier involved.
 
 ## Daily Vs Initialization

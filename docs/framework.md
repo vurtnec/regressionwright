@@ -18,21 +18,20 @@ Initialization is different: AI may create or modify stage code, run it, inspect
 
 ## Executor Status
 
-The current release supports Playwright web execution only. The CLI launches a
-Playwright spec, and the included runner, browser profile, evidence, and
-performance helpers are Playwright-specific.
-
-The architecture reserves future executor boundaries without shipping them:
-
 | Executor | Status |
 |---|---|
 | Playwright | Supported in `@regressionwright/core` |
-| Appium | Reserved; no package or runtime implementation |
-| XCUITest | Reserved; no package or runtime implementation |
+| Appium | Supported through the built-in runner; generated iOS projects use the XCUITest driver |
+| Direct XCUITest | Not implemented |
 
 An executor is not supported until it can run a complete generated project and
 produce the same plan, input, context, summary, and structured evidence
 artifacts. Mixed-executor pipelines are not currently supported.
+
+The CLI derives one executor type from selected stage metadata. Playwright
+launches the built-in Playwright spec. Appium launches
+`scripts/appium-runner.mjs`, which loads the same module
+`pipelineRunnerModule` contract without wrapping it in a Playwright test.
 
 ## Generic Layer
 
@@ -43,11 +42,13 @@ The generic layer should not contain project business vocabulary.
 - `bin/regressionwright.mjs`: package-shaped CLI entry.
 - `bin/create-regressionwright.mjs`: standalone project scaffold entry.
 - `scripts/harness.mjs`: CLI implementation for `run`, `daily`, `resume`, `registry`, and `diagnose`.
+- `scripts/appium-runner.mjs`: generic Appium stage loop.
 - `scripts/refresh-auth.mjs`: generic auth-state refresh wrapper.
 - `scripts/open-browser-profile.mjs`: generic persistent browser profile wrapper.
 - `tests/harness/pipeline-runner.spec.mjs`: generic Playwright runner that loads the module runner from the adapter.
 - `skills/regressionwright/`: AI runbook for operating the harness.
 - `templates/project/`: standalone project scaffold.
+- `templates/appium-project/`: standalone iOS Appium project scaffold.
 - `templates/module-pack/`: module-pack extension notes.
 
 These are the generic package files for `@regressionwright/core`.
@@ -83,6 +84,9 @@ E2E_REGRESSION_BROWSER_CHANNEL
 E2E_REGRESSION_RESUME_CONTEXT_PATH
 E2E_REGRESSION_RESUME_SOURCE_RUN_DIR
 E2E_REGRESSION_RESUME_START_STAGE
+E2E_REGRESSION_EXECUTOR
+E2E_REGRESSION_EXECUTOR_OUTPUT_DIR
+E2E_REGRESSION_APPIUM_OUTPUT_DIR
 ```
 
 Common mail integration variables:
@@ -100,7 +104,7 @@ Every run starts with a data node that creates `input.json`.
 Pipeline JSON only composes stages. It should not point to a separate pipeline-level
 data recipe. The effective pipeline input is derived from the selected stage
 metadata and each stage's declared input shape. A module-owned data generator may
-then fill dynamic values from project data recipes before browser execution.
+then fill dynamic values from project data recipes before executor dispatch.
 
 By default, input is generated deterministically from:
 
@@ -305,7 +309,15 @@ export const defaultPipelineId = '{module}-regression';
 export const pipelineRunnerModule = 'tests/{module}/pipeline-runner.ts';
 ```
 
-The generic Playwright spec is provided by the harness package. Only set `playwrightSpecPath` in an adapter when a module intentionally needs a custom top-level Playwright spec.
+Appium adapters also declare:
+
+```js
+export const executorType = 'appium';
+```
+
+The generic Playwright spec is provided by the harness package. Only set
+`playwrightSpecPath` when a Playwright module intentionally needs a custom
+top-level spec. Appium modules do not declare a Playwright spec.
 
 Required module runner export:
 
@@ -318,6 +330,10 @@ export async function createPipelineRunner({ browser, testInfo }) {
   };
 }
 ```
+
+For Appium, the same return contract applies, but `createPipelineRunner`
+creates and owns a WebdriverIO/Appium session instead of receiving Playwright
+fixtures.
 
 Rule of thumb:
 

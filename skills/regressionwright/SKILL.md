@@ -76,6 +76,7 @@ pnpm regressionwright profile --module <module>
 pnpm regressionwright --integration codex
 pnpm regressionwright integration install claude
 pnpm run create ../my-project-regression-test --module my-project --core-package "file:$PWD" --integration codex
+pnpm run create ../my-ios-regression-test --module my-ios-app --executor appium --core-package "file:$PWD" --integration codex
 pnpm check
 ```
 
@@ -155,6 +156,10 @@ pnpm run create ../my-project-regression-test --module my-project --core-package
 Append `--reporter stagewright` only when the user asks for the optional local
 StageWright Playwright report. Reporter output is observational and does not
 replace harness checks or diagnosis.
+
+Use `--executor appium` for a native mobile project. Read the generated device
+configuration and stage metadata before running. Do not invent capabilities,
+device ids, bundle ids, app paths, signing settings, or accessibility ids.
 
 Install this skill at project level when an agent integration needs to discover
 the harness runbook from the regression project:

@@ -1,0 +1,19 @@
+{
+  "name": "dev",
+  "__MODULE_ID__": {
+    "appium": {
+      "protocol": "http",
+      "hostname": "127.0.0.1",
+      "port": 4723,
+      "path": "/",
+      "logLevel": "info",
+      "capabilities": {
+        "platformName": "iOS",
+        "appium:automationName": "XCUITest",
+        "appium:deviceName": "iPhone Simulator",
+        "appium:platformVersion": "SET_ME",
+        "appium:app": "/absolute/path/to/MyApp.app"
+      }
+    }
+  }
+}

@@ -38,7 +38,7 @@ export type StageRegistryEntry = {
   implementationPath: string;
   executor: {
     type: string;
-    specPath: string;
+    specPath?: string;
     registryPath?: string;
   };
   tags: string[];

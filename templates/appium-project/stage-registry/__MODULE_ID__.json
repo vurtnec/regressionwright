@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "module": "__MODULE_ID__",
+  "description": "__MODULE_ID__ Appium stage registry.",
+  "stageDefinitions": [
+    "stages/__MODULE_ID__/app-session/default.json"
+  ]
+}

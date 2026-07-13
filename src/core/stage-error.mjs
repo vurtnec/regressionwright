@@ -47,7 +47,7 @@ function classifyErrorCode(message, error) {
     return 'VALIDATION_ERROR';
   }
 
-  if (/ENVIRONMENT_ERROR|Executable doesn't exist|playwright install|browserType\.launch|static assets|\/assets\/.*\.js|chunk|CDN/i.test(message)) {
+  if (/ENVIRONMENT_ERROR|Executable doesn't exist|playwright install|browserType\.launch|Appium server|Unable to connect|browser driver is running|service failed to start|ECONNREFUSED|XCUITest|WebDriverAgent|session not created|static assets|\/assets\/.*\.js|chunk|CDN/i.test(message)) {
     return 'ENVIRONMENT_ERROR';
   }
 
@@ -55,7 +55,7 @@ function classifyErrorCode(message, error) {
     return 'APP_ERROR';
   }
 
-  if (/locator|selector|toBeVisible|Cannot find visible|waiting for|getByRole|strict mode violation/i.test(message)) {
+  if (/locator|selector|accessibility id|no such element|element not found|toBeVisible|Cannot find visible|waiting for|getByRole|strict mode violation/i.test(message)) {
     return 'SELECTOR_NOT_FOUND';
   }
 

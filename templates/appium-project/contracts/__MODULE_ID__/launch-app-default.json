@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "launch-app-default",
+  "module": "__MODULE_ID__",
+  "name": "Launch iOS App",
+  "description": "Create an Appium XCUITest session and optionally wait for a configured accessibility id.",
+  "executor": "appium",
+  "mode": "e2e",
+  "requires": ["input.appSession.server", "input.appSession.capabilities"],
+  "produces": ["state.appSession.launched=true", "state.appSession.sessionId"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["server", "capabilities", "readyTimeoutMs"],
+    "properties": {
+      "server": {
+        "type": "object",
+        "required": ["hostname", "port", "path"],
+        "properties": {
+          "protocol": { "type": "string" },
+          "hostname": { "type": "string", "minLength": 1 },
+          "port": { "type": "number", "minimum": 1, "maximum": 65535 },
+          "path": { "type": "string", "minLength": 1 },
+          "logLevel": { "type": "string" }
+        }
+      },
+      "capabilities": {
+        "type": "object",
+        "required": ["platformName", "appium:automationName", "appium:deviceName"],
+        "properties": {
+          "platformName": { "const": "iOS" },
+          "appium:automationName": { "const": "XCUITest" },
+          "appium:deviceName": { "type": "string", "minLength": 1 },
+          "appium:platformVersion": { "type": "string" },
+          "appium:app": { "type": "string" },
+          "appium:bundleId": { "type": "string" },
+          "appium:udid": { "type": "string" }
+        }
+      },
+      "readyAccessibilityId": { "type": "string" },
+      "readyTimeoutMs": { "type": "number", "minimum": 1 }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["appSession"],
+        "properties": {
+          "appSession": {
+            "type": "object",
+            "required": ["launched", "sessionId", "platformName", "automationName"],
+            "properties": {
+              "launched": { "const": true },
+              "sessionId": { "type": "string", "minLength": 1 },
+              "platformName": { "const": "iOS" },
+              "automationName": { "const": "XCUITest" },
+              "readyElementVisible": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Starts a real Appium session and launches the configured iOS app."],
+  "evidence": ["Appium screenshot", "session id", "run context"]
+}

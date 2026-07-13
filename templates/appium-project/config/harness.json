@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "defaultModule": "__MODULE_ID__",
+  "modules": {
+    "__MODULE_ID__": {
+      "description": "__MODULE_ID__ iOS Appium regression module.",
+      "adapterPath": "src/modules/__MODULE_ID__/harness-adapter.mjs"
+    }
+  }
+}

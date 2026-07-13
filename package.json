@@ -9,6 +9,9 @@
     "e2e",
     "regression",
     "playwright",
+    "appium",
+    "ios-testing",
+    "mobile-testing",
     "test-harness",
     "automation",
     "ai-assisted-testing",
@@ -61,6 +64,7 @@
   "files": [
     "bin/",
     "scripts/harness.mjs",
+    "scripts/appium-runner.mjs",
     "scripts/check-package.mjs",
     "scripts/open-browser-profile.mjs",
     "scripts/refresh-auth.mjs",
@@ -95,6 +99,11 @@
   },
   "peerDependencies": {
     "@playwright/test": ">=1.60.0"
+  },
+  "peerDependenciesMeta": {
+    "@playwright/test": {
+      "optional": true
+    }
   },
   "dependencies": {
     "imapflow": "^1.3.5",

@@ -75,6 +75,10 @@ To add the optional StageWright Playwright reporter to the generated project,
 include `--reporter stagewright`. Without that flag, the project keeps the
 default Playwright list and HTML reporters only.
 
+To generate an iOS Appium project instead, include `--executor appium`. The
+generated project uses Appium 3, WebdriverIO, and the XCUITest driver install
+script; it does not install Playwright or accept the StageWright reporter flag.
+
 The target directory should be outside any existing pnpm workspace. If you are
 testing from this maintainer monorepo at `packages/core`, use a target outside
 the current workspace, for example:

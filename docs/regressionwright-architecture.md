@@ -6,7 +6,7 @@ This document records the generic harness model. Keep project-specific facts in 
 
 Build a deterministic real E2E regression harness where:
 
-- scripts execute browser workflows;
+- scripts execute web or native-app workflows;
 - AI plans, observes, diagnoses, and edits code when needed;
 - daily runs do not depend on AI clicking through the application;
 - the same project can run from terminal, Codex, Claude Code, or a scheduler.
@@ -31,8 +31,9 @@ flowchart TB
   subgraph Harness["Generic Harness Package"]
     CLI["Harness CLI"]
     Planner["Plan + Input Builder"]
-    Runner["Playwright Runtime<br/>current executor"]
-    FutureExecutors["Appium / XCUITest<br/>reserved · not implemented"]
+    Runner["Executor Dispatcher"]
+    Playwright["Playwright Runtime<br/>web"]
+    Appium["Appium Runtime<br/>native mobile · XCUITest starter"]
     Validator["Schema Validator"]
     Evidence["Evidence + Diagnosis"]
   end
@@ -55,8 +56,10 @@ flowchart TB
   DataRules --> Planner
   CLI --> Planner
   Planner --> Runner
-  Planner -. future executor boundary .-> FutureExecutors
-  Runner --> Adapter
+  Runner --> Playwright
+  Runner --> Appium
+  Playwright --> Adapter
+  Appium --> Adapter
   Adapter --> StageCode
   StageCode --> PageObjects
   PageObjects --> App
@@ -168,10 +171,11 @@ pipeline metadata
 
 Rules:
 
-- The data node writes `input.json` before any browser stage runs.
+- The data node writes `input.json` before any executor stage runs.
 - Environment `dataProfile` selects stage-data `profiles` overrides before
   `input.json` is written; pipeline structure stays unchanged.
 - Missing `plan.json` or `input.json` fails fast unless `E2E_REGRESSION_DEV_FALLBACK=1` is explicitly set for raw Playwright debugging.
+- Every selected stage must use the same executor type. Mixed Playwright/Appium pipelines fail during planning.
 - Stages share state only through `run-context.json`.
 - Contracts and checks validate stage boundaries after execution.
 

@@ -30,6 +30,7 @@ const requiredFiles = [
   'SECURITY.md',
   'bin/regressionwright.mjs',
   'bin/create-regressionwright.mjs',
+  'scripts/appium-runner.mjs',
 ];
 const forbiddenPatterns = [
   /(^|\/)node_modules\//,
@@ -47,7 +48,10 @@ for (const requiredFile of requiredFiles) {
 }
 
 for (const packedFile of packedFiles) {
-  if (packedFile === 'templates/project/.env.example') {
+  if (
+    packedFile === 'templates/project/.env.example' ||
+    packedFile === 'templates/appium-project/.env.example'
+  ) {
     continue;
   }
   if (forbiddenPatterns.some(pattern => pattern.test(packedFile))) {

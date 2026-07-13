@@ -5,7 +5,10 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const harnessPackageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const templateRoot = path.join(harnessPackageRoot, 'templates', 'project');
+const projectTemplateRoots = {
+  playwright: path.join(harnessPackageRoot, 'templates', 'project'),
+  appium: path.join(harnessPackageRoot, 'templates', 'appium-project'),
+};
 const skillSourceRoot = path.join(harnessPackageRoot, 'skills', 'regressionwright');
 
 const projectSkillIntegrations = {
@@ -34,6 +37,7 @@ function parseArgs(args) {
     moduleId: undefined,
     packageName: undefined,
     corePackage: '^0.1.0',
+    executor: 'playwright',
     integrations: [],
     reporter: undefined,
     force: false,
@@ -64,6 +68,15 @@ function parseArgs(args) {
       index += 1;
       continue;
     }
+    if (arg === '--executor') {
+      options.executor = requireValue(args, index, '--executor');
+      index += 1;
+      continue;
+    }
+    if (arg.startsWith('--executor=')) {
+      options.executor = arg.slice('--executor='.length);
+      continue;
+    }
     if (arg === '--integration') {
       options.integrations.push(...parseIntegrationList(requireValue(args, index, '--integration')));
       index += 1;
@@ -92,19 +105,25 @@ function parseArgs(args) {
   }
 
   if (!options.targetDir) {
-    throw new Error('Usage: create-regressionwright <project-dir> [--module <module-id>] [--package-name <name>] [--core-package <specifier>] [--reporter stagewright] [--force]');
+    throw new Error('Usage: create-regressionwright <project-dir> [--module <module-id>] [--executor <playwright|appium>] [--package-name <name>] [--core-package <specifier>] [--reporter stagewright] [--force]');
   }
 
   const targetPath = path.resolve(process.cwd(), options.targetDir);
   const targetName = path.basename(targetPath);
   const defaultModule = normalizeModuleId(stripRegressionSuffix(targetName));
+  const executor = normalizeExecutor(options.executor);
+  const reporter = normalizeReporter(options.reporter);
+  if (reporter && executor !== 'playwright') {
+    throw new Error('--reporter stagewright is only supported with --executor playwright.');
+  }
   return {
     ...options,
     targetPath,
     moduleId: normalizeModuleId(options.moduleId || defaultModule),
     packageName: options.packageName || normalizePackageName(targetName),
     integrations: normalizeIntegrations(options.integrations),
-    reporter: normalizeReporter(options.reporter),
+    executor,
+    reporter,
   };
 }
 
@@ -129,7 +148,7 @@ async function scaffoldProject(options) {
     __OPTIONAL_REPORTER_ENTRIES__: reporterTemplate.entries,
     __OPTIONAL_REPORTER_README__: reporterTemplate.readme,
   };
-  await copyTemplate(templateRoot, options.targetPath, tokens);
+  await copyTemplate(projectTemplateRoots[options.executor], options.targetPath, tokens);
   await configureProjectPackage(options);
   await installProjectSkills(options);
 }
@@ -262,6 +281,14 @@ function normalizeReporter(value) {
   return reporter;
 }
 
+function normalizeExecutor(value) {
+  const executor = String(value || 'playwright').trim().toLowerCase();
+  if (!projectTemplateRoots[executor]) {
+    throw new Error(`Unknown executor "${value}". Supported executors: ${Object.keys(projectTemplateRoots).join(', ')}.`);
+  }
+  return executor;
+}
+
 function createReporterTemplate(reporter, moduleId) {
   if (reporter !== 'stagewright') {
     return { imports: '', setup: '', entries: '', readme: '' };
@@ -307,6 +334,7 @@ Options:
   --module <module-id>        Module id for the starter project pack.
   --package-name <name>       package.json name. Defaults to the directory name.
   --core-package <spec>       @regressionwright/core dependency specifier. Defaults to ^0.1.0.
+  --executor <name>           Runtime executor: playwright (default) or appium.
   --integration <name>        Install project-level AI skill: codex, claude, or all.
   --reporter <name>           Install an optional project reporter: stagewright.
   --force                     Write into a non-empty target directory.
@@ -321,12 +349,19 @@ function printNextSteps(options) {
   console.log('Next steps:');
   console.log(`  cd ${relativeTarget}`);
   console.log('  pnpm install');
-  console.log('  pnpm exec playwright install chromium');
+  if (options.executor === 'appium') {
+    console.log('  pnpm appium:driver:install');
+    console.log('  # Configure config/dev.json, then start "pnpm appium:server" separately.');
+  } else {
+    console.log('  pnpm exec playwright install chromium');
+  }
   if (options.integrations.length === 0) {
     console.log('  pnpm regressionwright --integration codex');
   }
   console.log('  pnpm regressionwright registry');
-  console.log('  pnpm regressionwright run --headed');
+  console.log(options.executor === 'appium'
+    ? '  pnpm regressionwright run --env dev'
+    : '  pnpm regressionwright run --headed');
   if (options.reporter === 'stagewright') {
     console.log('  # StageWright: artifacts/runs/{pipeline}/{runId}/playwright-report/stagewright-report.html');
   }

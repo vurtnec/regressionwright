@@ -1,0 +1,16 @@
+{
+  "id": "launch-app-default",
+  "stage": "app-session",
+  "variant": "default",
+  "dataKey": "appSession",
+  "contractPath": "contracts/__MODULE_ID__/launch-app-default.json",
+  "implementationPath": "tests/__MODULE_ID__/stages/launch-app.mjs",
+  "defaultInput": "default",
+  "defaultChecks": "regression",
+  "executor": {
+    "type": "appium",
+    "registryPath": "tests/__MODULE_ID__/pipeline-runner.mjs"
+  },
+  "tags": ["starter", "ios", "appium", "launch"],
+  "status": "starter"
+}

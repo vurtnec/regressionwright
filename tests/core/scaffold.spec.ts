@@ -30,6 +30,29 @@ test.describe('project scaffold', () => {
     expect(playwrightConfig).not.toContain('__MODULE_ID__');
     expect(playwrightConfig).not.toContain('__OPTIONAL_REPORTER');
   });
+
+  test('creates an Appium project without Playwright runtime files', () => {
+    const projectRoot = scaffoldProject(['--executor', 'appium']);
+    const packageJson = readJson(path.join(projectRoot, 'package.json'));
+    const adapter = fs.readFileSync(
+      path.join(projectRoot, 'src/modules/demo/harness-adapter.mjs'),
+      'utf8'
+    );
+    const stage = readJson(path.join(projectRoot, 'stages/demo/app-session/default.json'));
+
+    expect(packageJson.devDependencies.appium).toBe('3.5.2');
+    expect(packageJson.devDependencies.webdriverio).toBe('9.29.1');
+    expect(packageJson.devDependencies['@playwright/test']).toBeUndefined();
+    expect(fs.existsSync(path.join(projectRoot, 'playwright.config.ts'))).toBe(false);
+    expect(adapter).toContain("export const executorType = 'appium'");
+    expect(stage.executor.type).toBe('appium');
+    expect(adapter).not.toContain('__MODULE_ID__');
+  });
+
+  test('rejects StageWright for an Appium project', () => {
+    expect(() => scaffoldProject(['--executor', 'appium', '--reporter', 'stagewright']))
+      .toThrow(/only supported with --executor playwright/);
+  });
 });
 
 function scaffoldProject(extraArgs: string[]) {

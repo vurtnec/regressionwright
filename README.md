@@ -5,21 +5,16 @@ code-executed daily runs.
 
 ## Runtime Support
 
-RegressionWright currently supports Playwright-based web E2E execution only.
-The core model is independent from business modules, but the CLI, runner,
-browser profile, evidence helpers, and performance monitor currently launch and
-observe Playwright.
+RegressionWright supports two deterministic executors while keeping the same
+pipeline, stage, schema, context, evidence, diagnosis, and resume model:
 
-Future executor package names are reserved in the architecture only:
+| Executor | Target | Runtime |
+|---|---|---|
+| `playwright` | Web | Built-in Playwright test runner |
+| `appium` | Native mobile; iOS starter included | Built-in Appium pipeline runner with project-owned WebdriverIO sessions |
 
-```text
-@regressionwright/playwright  reserved for extracting the current runtime
-@regressionwright/appium      reserved, not implemented
-@regressionwright/xcuitest    reserved, not implemented
-```
-
-Do not declare mobile support until an executor has its own implementation,
-tests, artifacts, and generated-project example.
+The Appium scaffold targets iOS through the XCUITest driver. Direct XCUITest
+execution without Appium and mixed-executor pipelines are not supported.
 
 ## Open Source Boundary
 
@@ -32,8 +27,8 @@ This repository contains the generic harness only:
 
 Project-specific regression packs are consumers of this package. They should
 live in separate repositories and provide their own pipelines, stage metadata,
-checks, data templates, page objects, credentials, browser profiles, auth state,
-and run artifacts.
+checks, data templates, page/screen objects, credentials, browser/device
+configuration, auth state, and run artifacts.
 
 ## Internal Or Company Use
 
@@ -80,6 +75,16 @@ pnpm run create ../my-project-regression-test \
 
 Add `--reporter stagewright` to install and configure the optional StageWright
 Playwright reporter in the generated project.
+
+For an iOS Appium project, use:
+
+```bash
+pnpm run create ../my-ios-regression-test \
+  --module my-ios-app \
+  --executor appium \
+  --core-package "file:$PWD" \
+  --integration codex
+```
 
 The target directory should be outside any existing pnpm workspace. If you are
 testing from this maintainer monorepo at `packages/core`, use a target outside
@@ -158,7 +163,7 @@ pnpm regressionwright registry
 pnpm regressionwright run --headed
 ```
 
-Project-specific module packs do not live in this package. They depend on this package and provide their own `config`, `pipelines`, `stages`, `contracts`, `checks`, `data-templates`, module adapter, and Playwright stage code.
+Project-specific module packs do not live in this package. They depend on this package and provide their own `config`, `pipelines`, `stages`, `contracts`, `checks`, `data-templates`, module adapter, and deterministic executor code.
 
 ## Package Contents
 
@@ -167,7 +172,9 @@ Project-specific module packs do not live in this package. They depend on this p
 - `src/core/`: generic pipeline, stage, input, evidence, and project adapter helpers.
 - `src/integrations/`: optional reusable provider integrations.
 - `tests/harness/`: generic Playwright runner used by consuming projects.
-- `templates/project/`: starter project covering the core data model.
+- `scripts/appium-runner.mjs`: generic Appium stage loop used by mobile projects.
+- `templates/project/`: Playwright starter project covering the core data model.
+- `templates/appium-project/`: iOS Appium/XCUITest starter project.
 - `skills/regressionwright/`: AI operating runbook.
 
 ## Public API
@@ -184,15 +191,47 @@ supported.
 AI / human operator
   -> harness CLI
   -> pipeline plan
+  -> selected deterministic executor
   -> deterministic stage code
   -> run context + evidence + diagnosis
 ```
 
-Daily runs treat stage execution as a black box. AI can inspect input, output, evidence, structured errors, and diagnosis summaries, but it should not operate the browser inside a stage.
+Daily runs treat stage execution as a black box. AI can inspect input, output, evidence, structured errors, and diagnosis summaries, but it should not operate the browser or device inside a stage.
 
 Initialization is different: AI can author or repair stage code, run it, inspect failures, and iterate until the stage or pipeline is stable enough for daily use.
 
 Resume runs continue from a previous run artifact. The CLI finds the failed or first pending stage, walks back to the nearest pipeline `resumeBoundary`, then starts a new run from that boundary with the old input and context.
+
+## Appium iOS Runtime
+
+Generate an Appium project with `--executor appium`, then install its pinned
+XCUITest driver and configure the device/app capabilities:
+
+```bash
+pnpm install
+pnpm appium:driver:install
+# Edit config/dev.json.
+pnpm appium:server
+```
+
+In another terminal:
+
+```bash
+pnpm regressionwright registry
+pnpm regressionwright run --env dev
+```
+
+Stage metadata declares `executor.type: "appium"`. The CLI dispatches to the
+built-in Appium runner, while the project `pipelineRunnerModule` owns the
+WebdriverIO session, selectors, gestures, and screenshots. Appium evidence is
+run-scoped under:
+
+```text
+artifacts/runs/{pipeline}/{runId}/appium/
+```
+
+Appium server and XCUITest driver lifecycle remain explicit prerequisites. Core
+does not silently install drivers, boot devices, or alter signing settings.
 
 ## Dynamic Data
 

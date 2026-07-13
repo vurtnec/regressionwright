@@ -22,19 +22,19 @@ Start initialization when:
 5. Grep callers before changing shared helpers or page-object functions.
 6. Update metadata and contract first, then implementation.
 7. Run the smallest valid stage flow visibly.
-8. Diagnose failures from artifacts; use browser inspection only to repair the deterministic executor.
+8. Diagnose failures from artifacts; use browser or device inspection only to repair the deterministic executor.
 9. Promote the stage into the pipeline only after it can run without AI intervention.
 
 ## Allowed In Initialization
 
-- Inspect app code, selectors, traces, screenshots, and browser behavior.
-- Drive the browser manually to understand the workflow.
+- Inspect app code, selectors, traces, screenshots, and browser/device behavior.
+- Drive the browser or device manually to understand the workflow.
 - Edit stage implementation, module adapter, metadata, schema, and data templates.
 - Create focused self-checks for parsers, generators, and schema rules.
 
 ## Not Allowed In Initialization
 
-- Hide manual AI browser actions inside a daily-run stage.
+- Hide manual AI browser/device actions inside a daily-run stage.
 - Store important handoff data only in AI memory.
 - Patch `input.json` or `run-context.json` after execution to make a failed stage appear passed.
 - Promote a stage into daily regression without a deterministic executor.
@@ -48,4 +48,4 @@ Before a stage or variant joins a daily pipeline:
 - Stage data defaults exist when generated input is required.
 - The executor writes meaningful run context fields.
 - Failures include structured evidence.
-- The stage has passed the smallest valid flow at least once without manual browser takeover.
+- The stage has passed the smallest valid flow at least once without manual browser/device takeover.

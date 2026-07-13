@@ -1,5 +1,6 @@
 export type ProjectHarnessAdapter = {
   defaultPipelineId?: string;
+  executorType?: 'playwright' | 'appium';
   playwrightSpecPath?: string;
   pipelineRunnerModule?: string;
   createRuntimeInput?: (params: { plan: unknown; options: Record<string, unknown> }) => unknown;
@@ -15,6 +16,17 @@ export type ProjectHarnessAdapter = {
   }) => void;
   afterPlaywrightRun?: (params: {
     result: unknown;
+    plan: unknown;
+    runId: string;
+    pipelineId: string;
+    runDir: string;
+    planPath: string;
+    inputPath: string;
+    envVars: Record<string, string | undefined>;
+  }) => void | Promise<void>;
+  afterRun?: (params: {
+    result: unknown;
+    executorType: 'playwright' | 'appium';
     plan: unknown;
     runId: string;
     pipelineId: string;

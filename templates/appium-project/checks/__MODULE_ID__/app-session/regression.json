@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "app-session.regression",
+  "module": "__MODULE_ID__",
+  "stage": "app-session",
+  "checks": "regression",
+  "description": "The Appium XCUITest session is created and the iOS app is launched.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["appSession"],
+        "properties": {
+          "appSession": {
+            "type": "object",
+            "required": ["launched", "sessionId"],
+            "properties": {
+              "launched": { "const": true },
+              "sessionId": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

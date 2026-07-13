@@ -126,8 +126,8 @@ async function runCommand(args) {
   setHarnessEnv(envVars, 'PLAN_PATH', files.planPath);
   setHarnessEnv(envVars, 'INPUT_PATH', files.inputPath);
   setHarnessEnv(envVars, 'STAGE_FILTER', stageRequestsForInput(plan).join(','));
-  setHarnessEnv(envVars, 'PLAYWRIGHT_OUTPUT_DIR', path.join(files.runDir, 'playwright'));
-  setHarnessEnv(envVars, 'PLAYWRIGHT_REPORT_DIR', path.join(files.runDir, 'playwright-report'));
+  const executorType = selectExecutorType(plan, projectAdapter);
+  configureExecutorEnv(envVars, executorType, files.runDir);
 
   if (options.dataVariant) {
     setHarnessEnv(envVars, 'DATA_VARIANT', options.dataVariant);
@@ -145,11 +145,12 @@ async function runCommand(args) {
   console.log(`Plan: ${files.planPath}`);
   console.log(`Input: ${files.inputPath}`);
   console.log(`Artifacts: ${files.runDir}`);
-  console.log(`Playwright report: ${envVars[harnessEnvKey('PLAYWRIGHT_REPORT_DIR')]}`);
+  logExecutorArtifacts(executorType, envVars);
 
-  const result = executePlaywrightRun({ plan, projectAdapter, envVars });
-  await runAfterPlaywrightRun(projectAdapter, {
+  const result = executeRegressionRun({ executorType, plan, projectAdapter, envVars });
+  await runAfterExecutorRun(projectAdapter, {
     result,
+    executorType,
     plan,
     runId,
     pipelineId: options.pipelineId,
@@ -286,8 +287,8 @@ async function resumeCommand(args) {
   setHarnessEnv(envVars, 'RESUME_SOURCE_RUN_DIR', sourceFiles.runDir);
   setHarnessEnv(envVars, 'RESUME_START_STAGE', resumeSelection.startNode.id);
   setHarnessEnv(envVars, 'STAGE_FILTER', plan.stages.map(stage => stage.refId || stage.id).join(','));
-  setHarnessEnv(envVars, 'PLAYWRIGHT_OUTPUT_DIR', path.join(files.runDir, 'playwright'));
-  setHarnessEnv(envVars, 'PLAYWRIGHT_REPORT_DIR', path.join(files.runDir, 'playwright-report'));
+  const executorType = selectExecutorType(plan, projectAdapter);
+  configureExecutorEnv(envVars, executorType, files.runDir);
 
   projectAdapter.applyRunEnv?.({ envVars, options: runtimeOptions, plan, runtimeInput: undefined });
 
@@ -304,11 +305,12 @@ async function resumeCommand(args) {
   console.log(`Plan: ${files.planPath}`);
   console.log(`Input: ${files.inputPath}`);
   console.log(`Artifacts: ${files.runDir}`);
-  console.log(`Playwright report: ${envVars[harnessEnvKey('PLAYWRIGHT_REPORT_DIR')]}`);
+  logExecutorArtifacts(executorType, envVars);
 
-  const result = executePlaywrightRun({ plan, projectAdapter, envVars });
-  await runAfterPlaywrightRun(projectAdapter, {
+  const result = executeRegressionRun({ executorType, plan, projectAdapter, envVars });
+  await runAfterExecutorRun(projectAdapter, {
     result,
+    executorType,
     plan,
     runId,
     pipelineId: plan.pipelineId,
@@ -613,6 +615,64 @@ function resolvePlaywrightBin() {
   return playwrightBin;
 }
 
+function selectExecutorType(plan, projectAdapter = {}) {
+  const stageExecutorTypes = [
+    ...new Set(
+      (plan.stages || [])
+        .map(stage => stage.registry?.executor?.type || stage.contract?.executor)
+        .filter(Boolean)
+    ),
+  ];
+
+  if (stageExecutorTypes.length > 1) {
+    throw new Error(
+      `The selected plan spans multiple executors: ${stageExecutorTypes.join(', ')}. ` +
+        'Mixed-executor pipelines are not supported.'
+    );
+  }
+
+  const plannedType = stageExecutorTypes[0];
+  const adapterType = projectAdapter.executorType;
+  if (adapterType && plannedType && adapterType !== plannedType) {
+    throw new Error(
+      `Project adapter executor "${adapterType}" does not match planned stage executor "${plannedType}".`
+    );
+  }
+
+  const executorType = adapterType || plannedType || 'playwright';
+  if (executorType !== 'playwright' && executorType !== 'appium') {
+    throw new Error(`Unsupported executor "${executorType}". Supported executors: playwright, appium.`);
+  }
+  return executorType;
+}
+
+function configureExecutorEnv(envVars, executorType, runDir) {
+  setHarnessEnv(envVars, 'EXECUTOR', executorType);
+  setHarnessEnv(envVars, 'EXECUTOR_OUTPUT_DIR', path.join(runDir, executorType));
+  if (executorType === 'playwright') {
+    setHarnessEnv(envVars, 'PLAYWRIGHT_OUTPUT_DIR', path.join(runDir, 'playwright'));
+    setHarnessEnv(envVars, 'PLAYWRIGHT_REPORT_DIR', path.join(runDir, 'playwright-report'));
+  } else if (executorType === 'appium') {
+    setHarnessEnv(envVars, 'APPIUM_OUTPUT_DIR', path.join(runDir, 'appium'));
+  }
+}
+
+function logExecutorArtifacts(executorType, envVars) {
+  console.log(`Executor: ${executorType}`);
+  if (executorType === 'playwright') {
+    console.log(`Playwright report: ${envVars[harnessEnvKey('PLAYWRIGHT_REPORT_DIR')]}`);
+  } else {
+    console.log(`Appium output: ${envVars[harnessEnvKey('APPIUM_OUTPUT_DIR')]}`);
+  }
+}
+
+function executeRegressionRun({ executorType, plan, projectAdapter, envVars }) {
+  if (executorType === 'appium') {
+    return executeAppiumRun({ envVars });
+  }
+  return executePlaywrightRun({ plan, projectAdapter, envVars });
+}
+
 function executePlaywrightRun({ plan, projectAdapter, envVars }) {
   const playwrightBin = resolvePlaywrightBin();
   const specPath = selectPlaywrightSpecPath(plan, projectAdapter);
@@ -635,13 +695,31 @@ function executePlaywrightRun({ plan, projectAdapter, envVars }) {
   return result;
 }
 
-async function runAfterPlaywrightRun(projectAdapter, params) {
-  if (!projectAdapter.afterPlaywrightRun) {
+function executeAppiumRun({ envVars }) {
+  const runnerPath = resolveFromHarnessPackageRoot('scripts/appium-runner.mjs');
+  if (!fs.existsSync(runnerPath)) {
+    throw new Error(`Cannot find the built-in Appium runner: ${runnerPath}`);
+  }
+  const result = spawnSync(process.execPath, [runnerPath], {
+    cwd: consumerProjectRoot,
+    env: envVars,
+    stdio: 'inherit',
+  });
+  if (result.error) {
+    throw result.error;
+  }
+  return result;
+}
+
+async function runAfterExecutorRun(projectAdapter, params) {
+  const hook = projectAdapter.afterRun ||
+    (params.executorType === 'playwright' ? projectAdapter.afterPlaywrightRun : undefined);
+  if (!hook) {
     return;
   }
 
   try {
-    await projectAdapter.afterPlaywrightRun(params);
+    await hook(params);
   } catch (error) {
     console.warn(`Post-run report hook failed: ${error instanceof Error ? error.message : String(error)}`);
   }

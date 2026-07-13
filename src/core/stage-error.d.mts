@@ -15,10 +15,14 @@ export type DiagnosisCategory = 'env_issue' | 'planning_error' | 'script_issue' 
 export type StageErrorEvidence = {
   runDir?: string;
   playwrightOutputDir?: string;
+  appiumOutputDir?: string;
   screenshot?: string;
   trace?: string;
   video?: string;
   url?: string;
+  sessionId?: string;
+  platformName?: string;
+  deviceName?: string;
   evidenceCollectionError?: string;
 };
 

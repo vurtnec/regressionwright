@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "__MODULE_ID__-regression",
+  "name": "__MODULE_ID__ iOS Regression",
+  "description": "Launch the configured iOS app through Appium and verify the session is ready.",
+  "module": "__MODULE_ID__",
+  "context": {
+    "scope": "pipeline",
+    "artifact": "run-context.json"
+  },
+  "stages": [
+    {
+      "stage": "app-session",
+      "variant": "default",
+      "input": "default",
+      "checks": "regression",
+      "resumeBoundary": true,
+      "pipelineDefault": true
+    }
+  ]
+}
