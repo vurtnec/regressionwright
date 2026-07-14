@@ -1,4 +1,9 @@
 {
   "desc": "RegressionWright fixture sitemap",
-  "rules": []
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
 }
