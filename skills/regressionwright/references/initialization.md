@@ -18,12 +18,15 @@ Start initialization when:
 1. Read `config/harness.json` and identify the target registered module.
 2. Run `pnpm regressionwright registry [module]`.
 3. Read the target pipeline, stage metadata, contracts, and data templates.
-4. Read the existing stage implementation before editing.
-5. Grep callers before changing shared helpers or page-object functions.
-6. Update metadata and contract first, then implementation.
-7. Run the smallest valid stage flow visibly.
-8. Diagnose failures from artifacts; use browser or device inspection only to repair the deterministic executor.
-9. Promote the stage into the pipeline only after it can run without AI intervention.
+4. Determine whether target application source is available. Discover its path from the workspace and project docs first; when it cannot be found and would materially improve authoring or repair, ask the user whether it can be provided. If available, inspect only source relevant to the current stage: routes, screens/components, selectors or accessibility identifiers, and input constraints. Source absence must not block black-box initialization.
+5. Read the existing stage implementation before editing.
+6. Grep callers before changing shared helpers or page-object functions.
+7. Update metadata and contract first, then implementation.
+8. Run the smallest valid stage flow visibly.
+9. Diagnose failures from artifacts; use browser or device inspection only to repair the deterministic executor.
+10. Promote the stage into the pipeline only after it can run without AI intervention.
+
+Application source is repair evidence, not hidden stage input. Access to source does not change the daily-run black-box boundary.
 
 ## Allowed In Initialization
 

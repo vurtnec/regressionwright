@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "skill": "regressionwright",
+  "cases": [
+    {
+      "id": "source-aware-stage-authoring",
+      "prompt": "Create a deterministic stage for an application whose source path is provided.",
+      "expectedBehavior": [
+        "Reads project metadata and only the application source relevant to the target stage.",
+        "Uses source to discover routes, selectors or accessibility identifiers, and input constraints before implementation."
+      ]
+    },
+    {
+      "id": "black-box-without-source",
+      "prompt": "Create a stage for an external application whose source is unavailable.",
+      "expectedBehavior": [
+        "Continues with black-box initialization instead of treating source as mandatory.",
+        "States the source limitation and persists discovered constraints in project metadata or schemas."
+      ]
+    },
+    {
+      "id": "source-after-daily-failure",
+      "prompt": "Diagnose a failed daily run when application source is also available.",
+      "expectedBehavior": [
+        "Diagnoses from run artifacts before reading stage internals or application source.",
+        "Reads source only after entering initialization or repair mode and never manually completes the running stage."
+      ]
+    },
+    {
+      "id": "executor-aware-run-command",
+      "prompt": "Run an Appium or Mini Program pipeline using the project skill.",
+      "expectedBehavior": [
+        "Uses the project-owned runtime configuration without adding browser-only flags.",
+        "Does not invoke auth or profile commands unless the module adapter supports browser sessions."
+      ]
+    }
+  ]
+}

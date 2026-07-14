@@ -13,8 +13,10 @@ pnpm regressionwright registry [module]
 Run a known pipeline:
 
 ```bash
-pnpm regressionwright run <pipeline-id> --headed
+pnpm regressionwright run <pipeline-id>
 ```
+
+Add `--headed` only when the selected executor is Playwright or another browser runtime that supports it. Appium and Mini Program modules use their project-owned runtime configuration.
 
 Run daily mode, which writes diagnosis summary after execution:
 
@@ -29,30 +31,30 @@ pnpm regressionwright ai-params-context <pipeline-id> --env <env-name>
 pnpm regressionwright daily <pipeline-id> --input-params <json-file-or-inline-json>
 ```
 
-The context command is the AI boundary for params generation. It tells the agent which paths are safe to override and which paths are copy-only or blocked. The daily command only consumes already-generated params. Manual runs without `--input-params` stay in stable daily mode. For manual deterministic variation, use supported project options such as `--data-variant <variant-id>`.
+The context command is the AI boundary for params generation; the daily command only consumes already-generated params. Read `data-generation.md` for the params protocol and the stable-daily vs ai-generated-daily split.
 
 Run a temporary flow only after checking stage prerequisites:
 
 ```bash
-pnpm regressionwright run --stages <stage-id-or-stage/variant[@actor],...> --headed
+pnpm regressionwright run --stages <stage-id-or-stage/variant[@actor],...>
 ```
 
 Run with AI-generated params:
 
 ```bash
-pnpm regressionwright run <pipeline-id> --input-params <json-file-or-inline-json> --headed
+pnpm regressionwright run <pipeline-id> --input-params <json-file-or-inline-json>
 ```
 
 Resume a failed run:
 
 ```bash
-pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --headed
+pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id>
 ```
 
 Override the failed-stage selection when the user gives a specific stage ref:
 
 ```bash
-pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --from <stage-ref> --headed
+pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --from <stage-ref>
 ```
 
 Resume creates a new run. It reuses the source run's `input.json` and `run-context.json`, finds the failed or first pending stage, walks backward to the nearest `resumeBoundary: true` stage ref, and executes from that boundary onward. If no boundary exists before the target stage, it starts from the target stage.

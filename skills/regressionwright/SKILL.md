@@ -1,6 +1,6 @@
 ---
 name: regressionwright
-description: "Use this skill when operating or maintaining a stage/pipeline based deterministic E2E regression harness: discover pipelines and stages, run regression flows, generate schema-valid input params, inspect evidence, diagnose failures, or extend stage-based flows. Domain details must come from pipeline metadata, stage metadata, contracts, and data templates."
+description: "This skill should be used when operating or maintaining a stage/pipeline based deterministic E2E regression harness: discover pipelines and stages, run regression flows, generate schema-valid input params, inspect evidence, diagnose failures, or extend stage-based flows."
 ---
 
 # RegressionWright
@@ -48,7 +48,7 @@ Read the project metadata before running or changing anything:
 
 1. Read `config/harness.json` to identify registered modules and the default module when the user did not specify one.
 2. List `pipelines/{module}/*.json` to find pipeline ids.
-3. Run the harness registry for the target module when available:
+3. Run the harness registry for the target module (fall back to reading `stage-registry/{module}.json` directly when the CLI is unavailable):
 
 ```bash
 pnpm regressionwright registry [module]
@@ -64,35 +64,34 @@ For detailed operation steps, read `references/run-and-diagnose.md`.
 Use the package-manager command exposed by the project. In this harness it is normally:
 
 ```bash
-pnpm regressionwright run <pipeline-id> --headed
+pnpm regressionwright run <pipeline-id>
 pnpm regressionwright daily <pipeline-id>
 pnpm regressionwright ai-params-context <pipeline-id> --env <env-name>
 pnpm regressionwright daily <pipeline-id> --input-params <json-file-or-inline-json>
-pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --headed
-pnpm regressionwright run --stages <stage-id-or-stage/variant[@actor],...> --headed
+pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id>
+pnpm regressionwright run --stages <stage-id-or-stage/variant[@actor],...>
 pnpm regressionwright diagnose artifacts/runs/<pipeline-id>/<run-id>
 pnpm regressionwright auth --module <module>
 pnpm regressionwright profile --module <module>
-pnpm regressionwright --integration codex
-pnpm regressionwright integration install claude
-pnpm run create ../my-project-regression-test --module my-project --core-package "file:$PWD" --integration codex
-pnpm run create ../my-ios-regression-test --module my-ios-app --executor appium --core-package "file:$PWD" --integration codex
-pnpm run create ../my-miniprogram-regression-test --module my-miniprogram --executor miniprogram --core-package "file:$PWD" --integration codex
 pnpm check
 ```
 
 Prefer pipeline ids for known workloads. Use temporary stage flows only after validating prerequisites through registry and contracts.
+
+Add `--headed` only for Playwright or another browser runtime that supports it. `auth` and `profile` are browser-session commands; use them only when the selected module adapter supports them. Appium and Mini Program modules use their generated project configuration and runtime setup.
+
+Scaffold and integration-install commands are covered in the Extension section; they run from the harness source root or install into the current regression project.
 
 ## Resume Runs
 
 Use resume when a previous run has a valid `plan.json`, `input.json`, and `run-context.json` and the user wants to continue from a failure:
 
 ```bash
-pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --headed
-pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --from <stage-ref> --headed
+pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id>
+pnpm regressionwright resume artifacts/runs/<pipeline-id>/<run-id> --from <stage-ref>
 ```
 
-The harness finds the failed or first pending stage, then walks backward to the nearest pipeline stage ref with `resumeBoundary: true`. It creates a new run using the old input and context, then executes from that boundary onward.
+Resume creates a new run from the source run's input and context. Boundary-selection mechanics and resume-specific evidence fields are described in `references/run-and-diagnose.md`.
 
 Keep the boundary generic:
 
@@ -118,15 +117,13 @@ AI-generated data must enter through the pipeline data node as saved input param
 
 ```bash
 pnpm regressionwright ai-params-context <pipeline-id> --env <env-name>
-pnpm regressionwright run <pipeline-id> --input-params <json-file-or-inline-json> --headed
+pnpm regressionwright run <pipeline-id> --input-params <json-file-or-inline-json>
 pnpm regressionwright daily <pipeline-id> --input-params <json-file-or-inline-json>
 ```
 
-Use the context command before writing params. It is the low-freedom interface between deterministic project data and AI-written scenario text. Generate only allowed paths, keep the JSON small, make business text realistic, and run the exact `command` printed by the context output so deterministic seed data stays aligned. Avoid meta-test wording such as AI, automated test, regression, test data, scenario id, run id, or template unless the context explicitly asks for it.
+Use the context command before writing params. It is the low-freedom interface between deterministic project data and AI-written scenario text.
 
-The harness builds the base input, merges params, writes final `input.json`, validates each selected stage input against that stage's `inputSchema`, and only then starts browser execution.
-
-When generating or reviewing input params, read `references/data-generation.md`.
+Before generating or reviewing input params, read `references/data-generation.md` for the full protocol, params shape, merge/validation flow, and UI-constrained value rules.
 
 ## Failure Diagnosis
 
@@ -147,6 +144,8 @@ High-level classification:
 When adding a stage, variant, module, or pipeline, read `references/extend-harness.md`.
 
 When creating or repairing deterministic coverage, read `references/initialization.md`.
+
+For stage authoring or repair, determine whether the target application's source is available before implementing. Source should improve route, selector, accessibility, and constraint discovery, but its absence must not block black-box initialization.
 
 When creating a new standalone regression project from the harness source root, use the scaffold command instead of copying an existing project pack:
 

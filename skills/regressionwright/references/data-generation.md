@@ -74,7 +74,7 @@ Only put explicit dates into AI params when the user asks for a specific schedul
 
 ## Params Shape
 
-Generate the smallest useful params object. Do not rewrite the whole final `input.json` unless necessary.
+Generate the smallest useful params object. Do not rewrite the whole final `input.json` unless necessary. Keep business text realistic and free of meta-test wording such as AI, automated test, regression, test data, scenario id, run id, or template, unless the context explicitly asks for it.
 
 Good params usually override:
 
