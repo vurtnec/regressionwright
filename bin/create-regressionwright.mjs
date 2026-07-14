@@ -8,6 +8,7 @@ const harnessPackageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.u
 const projectTemplateRoots = {
   playwright: path.join(harnessPackageRoot, 'templates', 'project'),
   appium: path.join(harnessPackageRoot, 'templates', 'appium-project'),
+  miniprogram: path.join(harnessPackageRoot, 'templates', 'miniprogram-project'),
 };
 const skillSourceRoot = path.join(harnessPackageRoot, 'skills', 'regressionwright');
 
@@ -105,7 +106,7 @@ function parseArgs(args) {
   }
 
   if (!options.targetDir) {
-    throw new Error('Usage: create-regressionwright <project-dir> [--module <module-id>] [--executor <playwright|appium>] [--package-name <name>] [--core-package <specifier>] [--reporter stagewright] [--force]');
+    throw new Error('Usage: create-regressionwright <project-dir> [--module <module-id>] [--executor <playwright|appium|miniprogram>] [--package-name <name>] [--core-package <specifier>] [--reporter stagewright] [--force]');
   }
 
   const targetPath = path.resolve(process.cwd(), options.targetDir);
@@ -334,7 +335,7 @@ Options:
   --module <module-id>        Module id for the starter project pack.
   --package-name <name>       package.json name. Defaults to the directory name.
   --core-package <spec>       @regressionwright/core dependency specifier. Defaults to ^0.1.0.
-  --executor <name>           Runtime executor: playwright (default) or appium.
+  --executor <name>           Runtime executor: playwright (default), appium, or miniprogram.
   --integration <name>        Install project-level AI skill: codex, claude, or all.
   --reporter <name>           Install an optional project reporter: stagewright.
   --force                     Write into a non-empty target directory.
@@ -352,6 +353,9 @@ function printNextSteps(options) {
   if (options.executor === 'appium') {
     console.log('  pnpm appium:driver:install');
     console.log('  # Configure config/dev.json, then start "pnpm appium:server" separately.');
+  } else if (options.executor === 'miniprogram') {
+    console.log('  # Sign in to WeChat DevTools and enable its service port.');
+    console.log('  # Configure config/dev.json or the WECHAT_DEVTOOLS_CLI and MINIPROGRAM_PROJECT_PATH env vars.');
   } else {
     console.log('  pnpm exec playwright install chromium');
   }
@@ -359,9 +363,9 @@ function printNextSteps(options) {
     console.log('  pnpm regressionwright --integration codex');
   }
   console.log('  pnpm regressionwright registry');
-  console.log(options.executor === 'appium'
-    ? '  pnpm regressionwright run --env dev'
-    : '  pnpm regressionwright run --headed');
+  console.log(options.executor === 'playwright'
+    ? '  pnpm regressionwright run --headed'
+    : '  pnpm regressionwright run --env dev');
   if (options.reporter === 'stagewright') {
     console.log('  # StageWright: artifacts/runs/{pipeline}/{runId}/playwright-report/stagewright-report.html');
   }

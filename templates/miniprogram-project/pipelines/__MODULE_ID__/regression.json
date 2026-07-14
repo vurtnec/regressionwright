@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "__MODULE_ID__-regression",
+  "name": "__MODULE_ID__ Mini Program Regression",
+  "description": "Launch the sample Mini Program and navigate from Home to Settings.",
+  "module": "__MODULE_ID__",
+  "context": {
+    "scope": "pipeline",
+    "artifact": "run-context.json"
+  },
+  "stages": [
+    {
+      "stage": "mini-program-session",
+      "variant": "default",
+      "input": "default",
+      "checks": "regression",
+      "resumeBoundary": true,
+      "pipelineDefault": true
+    },
+    {
+      "stage": "page-navigation",
+      "variant": "open-settings",
+      "input": "open-settings",
+      "checks": "regression"
+    }
+  ]
+}

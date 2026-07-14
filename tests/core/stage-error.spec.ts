@@ -21,4 +21,14 @@ test.describe('stage error classification', () => {
     expect(error.code).toBe('SELECTOR_NOT_FOUND');
     expect(error.category).toBe('script_issue');
   });
+
+  test('classifies a closed WeChat DevTools service port as an environment issue', () => {
+    const error = createStageError(
+      new Error('Failed to launch wechat web devTools, please make sure http port is open'),
+      { stageId: 'mini-program-session/default' }
+    );
+
+    expect(error.code).toBe('ENVIRONMENT_ERROR');
+    expect(error.category).toBe('env_issue');
+  });
 });

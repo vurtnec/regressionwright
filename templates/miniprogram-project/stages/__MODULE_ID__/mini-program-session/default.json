@@ -1,0 +1,16 @@
+{
+  "id": "launch-mini-program-default",
+  "stage": "mini-program-session",
+  "variant": "default",
+  "dataKey": "miniProgramSession",
+  "contractPath": "contracts/__MODULE_ID__/launch-mini-program-default.json",
+  "implementationPath": "tests/__MODULE_ID__/stages/launch-mini-program.mjs",
+  "defaultInput": "default",
+  "defaultChecks": "regression",
+  "executor": {
+    "type": "miniprogram",
+    "registryPath": "tests/__MODULE_ID__/pipeline-runner.mjs"
+  },
+  "tags": ["starter", "wechat", "miniprogram", "launch"],
+  "status": "starter"
+}

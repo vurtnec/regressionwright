@@ -1,0 +1,16 @@
+page {
+  background: #f4f5f7;
+  color: #111827;
+  font-family: sans-serif;
+}
+
+.page {
+  padding: 48rpx;
+}
+
+.title {
+  display: block;
+  margin-bottom: 32rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+}

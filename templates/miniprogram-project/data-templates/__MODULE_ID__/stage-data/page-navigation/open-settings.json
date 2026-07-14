@@ -1,0 +1,7 @@
+{
+  "clickSelector": "#settings-link",
+  "expectedPath": "pages/settings/settings",
+  "readySelector": "#settings-title",
+  "expectedText": "Settings",
+  "timeoutMs": 15000
+}

@@ -6,7 +6,7 @@ This document records the generic harness model. Keep project-specific facts in 
 
 Build a deterministic real E2E regression harness where:
 
-- scripts execute web or native-app workflows;
+- scripts execute web, native-app, or Mini Program workflows;
 - AI plans, observes, diagnoses, and edits code when needed;
 - daily runs do not depend on AI clicking through the application;
 - the same project can run from terminal, Codex, Claude Code, or a scheduler.
@@ -34,6 +34,7 @@ flowchart TB
     Runner["Executor Dispatcher"]
     Playwright["Playwright Runtime<br/>web"]
     Appium["Appium Runtime<br/>native mobile · XCUITest starter"]
+    MiniProgram["Mini Program Runtime<br/>WeChat DevTools"]
     Validator["Schema Validator"]
     Evidence["Evidence + Diagnosis"]
   end
@@ -58,8 +59,10 @@ flowchart TB
   Planner --> Runner
   Runner --> Playwright
   Runner --> Appium
+  Runner --> MiniProgram
   Playwright --> Adapter
   Appium --> Adapter
+  MiniProgram --> Adapter
   Adapter --> StageCode
   StageCode --> PageObjects
   PageObjects --> App

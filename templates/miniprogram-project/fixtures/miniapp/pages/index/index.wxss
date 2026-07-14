@@ -1,0 +1,5 @@
+button {
+  margin: 0;
+  background: #111827;
+  color: #ffffff;
+}

@@ -22,6 +22,7 @@ Initialization is different: AI may create or modify stage code, run it, inspect
 |---|---|
 | Playwright | Supported in `@regressionwright/core` |
 | Appium | Supported through the built-in runner; generated iOS projects use the XCUITest driver |
+| Mini Program | Supported through the built-in runner; generated projects use WeChat DevTools automation |
 | Direct XCUITest | Not implemented |
 
 An executor is not supported until it can run a complete generated project and
@@ -29,8 +30,9 @@ produce the same plan, input, context, summary, and structured evidence
 artifacts. Mixed-executor pipelines are not currently supported.
 
 The CLI derives one executor type from selected stage metadata. Playwright
-launches the built-in Playwright spec. Appium launches
-`scripts/appium-runner.mjs`, which loads the same module
+launches the built-in Playwright spec. Appium and Mini Program launch their
+small executor entry points, which share `scripts/project-pipeline-runner.mjs`
+and load the same module
 `pipelineRunnerModule` contract without wrapping it in a Playwright test.
 
 ## Generic Layer
@@ -43,12 +45,15 @@ The generic layer should not contain project business vocabulary.
 - `bin/create-regressionwright.mjs`: standalone project scaffold entry.
 - `scripts/harness.mjs`: CLI implementation for `run`, `daily`, `resume`, `registry`, and `diagnose`.
 - `scripts/appium-runner.mjs`: generic Appium stage loop.
+- `scripts/miniprogram-runner.mjs`: generic Mini Program stage loop.
+- `scripts/project-pipeline-runner.mjs`: shared external executor stage loop.
 - `scripts/refresh-auth.mjs`: generic auth-state refresh wrapper.
 - `scripts/open-browser-profile.mjs`: generic persistent browser profile wrapper.
 - `tests/harness/pipeline-runner.spec.mjs`: generic Playwright runner that loads the module runner from the adapter.
 - `skills/regressionwright/`: AI runbook for operating the harness.
 - `templates/project/`: standalone project scaffold.
 - `templates/appium-project/`: standalone iOS Appium project scaffold.
+- `templates/miniprogram-project/`: standalone WeChat Mini Program project scaffold.
 - `templates/module-pack/`: module-pack extension notes.
 
 These are the generic package files for `@regressionwright/core`.
@@ -87,6 +92,7 @@ E2E_REGRESSION_RESUME_START_STAGE
 E2E_REGRESSION_EXECUTOR
 E2E_REGRESSION_EXECUTOR_OUTPUT_DIR
 E2E_REGRESSION_APPIUM_OUTPUT_DIR
+E2E_REGRESSION_MINIPROGRAM_OUTPUT_DIR
 ```
 
 Common mail integration variables:

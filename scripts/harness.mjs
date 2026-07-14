@@ -640,8 +640,10 @@ function selectExecutorType(plan, projectAdapter = {}) {
   }
 
   const executorType = adapterType || plannedType || 'playwright';
-  if (executorType !== 'playwright' && executorType !== 'appium') {
-    throw new Error(`Unsupported executor "${executorType}". Supported executors: playwright, appium.`);
+  if (!['playwright', 'appium', 'miniprogram'].includes(executorType)) {
+    throw new Error(
+      `Unsupported executor "${executorType}". Supported executors: playwright, appium, miniprogram.`
+    );
   }
   return executorType;
 }
@@ -654,6 +656,8 @@ function configureExecutorEnv(envVars, executorType, runDir) {
     setHarnessEnv(envVars, 'PLAYWRIGHT_REPORT_DIR', path.join(runDir, 'playwright-report'));
   } else if (executorType === 'appium') {
     setHarnessEnv(envVars, 'APPIUM_OUTPUT_DIR', path.join(runDir, 'appium'));
+  } else if (executorType === 'miniprogram') {
+    setHarnessEnv(envVars, 'MINIPROGRAM_OUTPUT_DIR', path.join(runDir, 'miniprogram'));
   }
 }
 
@@ -661,14 +665,16 @@ function logExecutorArtifacts(executorType, envVars) {
   console.log(`Executor: ${executorType}`);
   if (executorType === 'playwright') {
     console.log(`Playwright report: ${envVars[harnessEnvKey('PLAYWRIGHT_REPORT_DIR')]}`);
-  } else {
+  } else if (executorType === 'appium') {
     console.log(`Appium output: ${envVars[harnessEnvKey('APPIUM_OUTPUT_DIR')]}`);
+  } else {
+    console.log(`Mini Program output: ${envVars[harnessEnvKey('MINIPROGRAM_OUTPUT_DIR')]}`);
   }
 }
 
 function executeRegressionRun({ executorType, plan, projectAdapter, envVars }) {
-  if (executorType === 'appium') {
-    return executeAppiumRun({ envVars });
+  if (executorType !== 'playwright') {
+    return executeProjectPipelineRun({ executorType, envVars });
   }
   return executePlaywrightRun({ plan, projectAdapter, envVars });
 }
@@ -695,10 +701,10 @@ function executePlaywrightRun({ plan, projectAdapter, envVars }) {
   return result;
 }
 
-function executeAppiumRun({ envVars }) {
-  const runnerPath = resolveFromHarnessPackageRoot('scripts/appium-runner.mjs');
+function executeProjectPipelineRun({ executorType, envVars }) {
+  const runnerPath = resolveFromHarnessPackageRoot(`scripts/${executorType}-runner.mjs`);
   if (!fs.existsSync(runnerPath)) {
-    throw new Error(`Cannot find the built-in Appium runner: ${runnerPath}`);
+    throw new Error(`Cannot find the built-in ${executorType} runner: ${runnerPath}`);
   }
   const result = spawnSync(process.execPath, [runnerPath], {
     cwd: consumerProjectRoot,

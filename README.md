@@ -5,16 +5,18 @@ code-executed daily runs.
 
 ## Runtime Support
 
-RegressionWright supports two deterministic executors while keeping the same
+RegressionWright supports three deterministic executors while keeping the same
 pipeline, stage, schema, context, evidence, diagnosis, and resume model:
 
 | Executor | Target | Runtime |
 |---|---|---|
 | `playwright` | Web | Built-in Playwright test runner |
 | `appium` | Native mobile; iOS starter included | Built-in Appium pipeline runner with project-owned WebdriverIO sessions |
+| `miniprogram` | WeChat Mini Program | Built-in project runner with project-owned `miniprogram-automator` sessions |
 
 The Appium scaffold targets iOS through the XCUITest driver. Direct XCUITest
-execution without Appium and mixed-executor pipelines are not supported.
+execution without Appium is not supported. The Mini Program scaffold targets
+WeChat DevTools automation. Mixed-executor pipelines are not supported.
 
 ## Open Source Boundary
 
@@ -82,6 +84,16 @@ For an iOS Appium project, use:
 pnpm run create ../my-ios-regression-test \
   --module my-ios-app \
   --executor appium \
+  --core-package "file:$PWD" \
+  --integration codex
+```
+
+For a WeChat Mini Program project, use:
+
+```bash
+pnpm run create ../my-miniprogram-regression-test \
+  --module my-miniprogram \
+  --executor miniprogram \
   --core-package "file:$PWD" \
   --integration codex
 ```
@@ -173,8 +185,11 @@ Project-specific module packs do not live in this package. They depend on this p
 - `src/integrations/`: optional reusable provider integrations.
 - `tests/harness/`: generic Playwright runner used by consuming projects.
 - `scripts/appium-runner.mjs`: generic Appium stage loop used by mobile projects.
+- `scripts/miniprogram-runner.mjs`: generic Mini Program stage loop.
+- `scripts/project-pipeline-runner.mjs`: shared project-owned pipeline runner contract.
 - `templates/project/`: Playwright starter project covering the core data model.
 - `templates/appium-project/`: iOS Appium/XCUITest starter project.
+- `templates/miniprogram-project/`: WeChat DevTools starter with a runnable two-page fixture.
 - `skills/regressionwright/`: AI operating runbook.
 
 ## Public API
@@ -232,6 +247,32 @@ artifacts/runs/{pipeline}/{runId}/appium/
 
 Appium server and XCUITest driver lifecycle remain explicit prerequisites. Core
 does not silently install drivers, boot devices, or alter signing settings.
+
+## WeChat Mini Program Runtime
+
+Generate a project with `--executor miniprogram`. Install and sign in to WeChat
+DevTools, then enable its service port under Settings > Security. The generated
+project includes a two-page fixture and defaults to the standard macOS CLI path:
+
+```bash
+pnpm install
+pnpm regressionwright registry
+pnpm regressionwright run --env dev
+```
+
+Override the DevTools or project path through `config/dev.json` or:
+
+```bash
+export WECHAT_DEVTOOLS_CLI=/Applications/wechatwebdevtools.app/Contents/MacOS/cli
+export MINIPROGRAM_PROJECT_PATH=/absolute/path/to/miniprogram
+```
+
+Stage metadata declares `executor.type: "miniprogram"`. Project stage code owns
+routes, selectors, interactions, and screenshots. Evidence is retained under:
+
+```text
+artifacts/runs/{pipeline}/{runId}/miniprogram/
+```
 
 ## Dynamic Data
 

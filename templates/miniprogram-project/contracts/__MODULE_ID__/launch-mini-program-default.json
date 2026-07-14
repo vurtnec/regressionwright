@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "launch-mini-program-default",
+  "module": "__MODULE_ID__",
+  "name": "Launch Mini Program",
+  "description": "Launch WeChat DevTools automation, open the initial route, and verify its ready element.",
+  "executor": "miniprogram",
+  "mode": "e2e",
+  "requires": ["input.miniProgramSession.launchOptions", "input.miniProgramSession.initialPath"],
+  "produces": ["state.miniProgramSession.launched=true", "state.miniProgramSession.pagePath"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["launchOptions", "initialPath", "readySelector", "readyTimeoutMs"],
+    "properties": {
+      "launchOptions": {
+        "type": "object",
+        "required": ["projectPath"],
+        "properties": {
+          "cliPath": { "type": "string" },
+          "projectPath": { "type": "string", "minLength": 1 },
+          "timeout": { "type": "number", "minimum": 1 },
+          "port": { "type": "number", "minimum": 1, "maximum": 65535 },
+          "trustProject": { "type": "boolean" }
+        }
+      },
+      "initialPath": { "type": "string", "minLength": 1 },
+      "readySelector": { "type": "string", "minLength": 1 },
+      "expectedText": { "type": "string" },
+      "readyTimeoutMs": { "type": "number", "minimum": 1 }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["miniProgramSession"],
+        "properties": {
+          "miniProgramSession": {
+            "type": "object",
+            "required": ["launched", "pagePath", "readyElementVisible"],
+            "properties": {
+              "launched": { "const": true },
+              "pagePath": { "type": "string", "minLength": 1 },
+              "readySelector": { "type": "string", "minLength": 1 },
+              "readyElementVisible": { "const": true },
+              "readyText": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Starts WeChat DevTools and opens the configured Mini Program project."],
+  "evidence": ["Mini Program screenshot", "current page path", "run context"]
+}

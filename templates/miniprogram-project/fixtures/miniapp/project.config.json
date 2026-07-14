@@ -1,0 +1,13 @@
+{
+  "description": "RegressionWright Mini Program fixture",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "setting": {
+    "es6": true,
+    "minified": false,
+    "urlCheck": false
+  },
+  "appid": "touristappid",
+  "projectname": "regressionwright-mini-program-fixture",
+  "condition": {}
+}

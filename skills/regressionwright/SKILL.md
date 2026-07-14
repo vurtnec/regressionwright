@@ -1,6 +1,6 @@
 ---
 name: regressionwright
-description: Use this skill when operating or maintaining a stage/pipeline based deterministic E2E regression harness: discover pipelines and stages, run regression flows, generate schema-valid input params, inspect evidence, diagnose failures, or extend stage-based flows. Domain details must come from pipeline metadata, stage metadata, contracts, and data templates.
+description: "Use this skill when operating or maintaining a stage/pipeline based deterministic E2E regression harness: discover pipelines and stages, run regression flows, generate schema-valid input params, inspect evidence, diagnose failures, or extend stage-based flows. Domain details must come from pipeline metadata, stage metadata, contracts, and data templates."
 ---
 
 # RegressionWright
@@ -77,6 +77,7 @@ pnpm regressionwright --integration codex
 pnpm regressionwright integration install claude
 pnpm run create ../my-project-regression-test --module my-project --core-package "file:$PWD" --integration codex
 pnpm run create ../my-ios-regression-test --module my-ios-app --executor appium --core-package "file:$PWD" --integration codex
+pnpm run create ../my-miniprogram-regression-test --module my-miniprogram --executor miniprogram --core-package "file:$PWD" --integration codex
 pnpm check
 ```
 
@@ -160,6 +161,10 @@ replace harness checks or diagnosis.
 Use `--executor appium` for a native mobile project. Read the generated device
 configuration and stage metadata before running. Do not invent capabilities,
 device ids, bundle ids, app paths, signing settings, or accessibility ids.
+
+Use `--executor miniprogram` for a WeChat Mini Program project. Read the
+generated DevTools/project configuration and stage metadata before running. Do
+not invent routes, selectors, App IDs, accounts, tickets, or service-port state.
 
 Install this skill at project level when an agent integration needs to discover
 the harness runbook from the regression project:

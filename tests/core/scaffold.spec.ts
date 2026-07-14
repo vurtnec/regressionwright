@@ -53,6 +53,33 @@ test.describe('project scaffold', () => {
     expect(() => scaffoldProject(['--executor', 'appium', '--reporter', 'stagewright']))
       .toThrow(/only supported with --executor playwright/);
   });
+
+  test('creates a Mini Program project with a runnable two-stage fixture', () => {
+    const projectRoot = scaffoldProject(['--executor', 'miniprogram']);
+    const packageJson = readJson(path.join(projectRoot, 'package.json'));
+    const adapter = fs.readFileSync(
+      path.join(projectRoot, 'src/modules/demo/harness-adapter.mjs'),
+      'utf8'
+    );
+    const pipeline = readJson(path.join(projectRoot, 'pipelines/demo/regression.json'));
+    const launchStage = readJson(
+      path.join(projectRoot, 'stages/demo/mini-program-session/default.json')
+    );
+
+    expect(packageJson.devDependencies['miniprogram-automator']).toBe('0.12.1');
+    expect(packageJson.devDependencies.appium).toBeUndefined();
+    expect(packageJson.devDependencies['@playwright/test']).toBeUndefined();
+    expect(adapter).toContain("export const executorType = 'miniprogram'");
+    expect(launchStage.executor.type).toBe('miniprogram');
+    expect(pipeline.stages).toHaveLength(2);
+    expect(fs.existsSync(path.join(projectRoot, 'fixtures/miniapp/project.config.json'))).toBe(true);
+    expect(adapter).not.toContain('__MODULE_ID__');
+  });
+
+  test('rejects StageWright for a Mini Program project', () => {
+    expect(() => scaffoldProject(['--executor', 'miniprogram', '--reporter', 'stagewright']))
+      .toThrow(/only supported with --executor playwright/);
+  });
 });
 
 function scaffoldProject(extraArgs: string[]) {

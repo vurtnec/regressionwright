@@ -72,6 +72,7 @@ artifacts/playwright/**/error-context.md
 artifacts/playwright/**/test-failed-*.png
 artifacts/playwright/**/trace.zip
 artifacts/runs/<pipeline-id>/<run-id>/appium/*.png
+artifacts/runs/<pipeline-id>/<run-id>/miniprogram/*.png
 ```
 
 Generate diagnosis when available:

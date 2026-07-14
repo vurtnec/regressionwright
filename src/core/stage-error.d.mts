@@ -16,6 +16,7 @@ export type StageErrorEvidence = {
   runDir?: string;
   playwrightOutputDir?: string;
   appiumOutputDir?: string;
+  miniProgramOutputDir?: string;
   screenshot?: string;
   trace?: string;
   video?: string;
@@ -23,6 +24,7 @@ export type StageErrorEvidence = {
   sessionId?: string;
   platformName?: string;
   deviceName?: string;
+  pagePath?: string;
   evidenceCollectionError?: string;
 };
 

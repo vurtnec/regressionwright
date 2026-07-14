@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "open-settings-default",
+  "module": "__MODULE_ID__",
+  "name": "Open Settings Page",
+  "description": "Tap a page element, wait for the expected route, and verify its ready element.",
+  "executor": "miniprogram",
+  "mode": "e2e",
+  "requires": ["state.miniProgramSession.launched=true", "input.pageNavigation.clickSelector"],
+  "produces": ["state.pageNavigation.completed=true", "state.pageNavigation.pagePath"],
+  "inputSchema": {
+    "type": "object",
+    "required": ["clickSelector", "expectedPath", "readySelector", "timeoutMs"],
+    "properties": {
+      "clickSelector": { "type": "string", "minLength": 1 },
+      "expectedPath": { "type": "string", "minLength": 1 },
+      "readySelector": { "type": "string", "minLength": 1 },
+      "expectedText": { "type": "string" },
+      "timeoutMs": { "type": "number", "minimum": 1 }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["pageNavigation"],
+        "properties": {
+          "pageNavigation": {
+            "type": "object",
+            "required": ["completed", "pagePath", "readyElementVisible"],
+            "properties": {
+              "completed": { "const": true },
+              "pagePath": { "type": "string", "minLength": 1 },
+              "readyElementVisible": { "const": true },
+              "readyText": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "errorSchema": {
+    "type": "object",
+    "required": ["code", "category", "message", "stageId"],
+    "properties": {
+      "code": { "type": "string" },
+      "category": { "type": "string" },
+      "message": { "type": "string" },
+      "stageId": { "type": "string" },
+      "evidence": { "type": "object" }
+    }
+  },
+  "sideEffects": ["Taps a real Mini Program element and changes the current route."],
+  "evidence": ["Mini Program screenshot", "current page path", "run context"]
+}

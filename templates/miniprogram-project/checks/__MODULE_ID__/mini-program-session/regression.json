@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "mini-program-session.regression",
+  "module": "__MODULE_ID__",
+  "stage": "mini-program-session",
+  "checks": "regression",
+  "description": "The Mini Program is launched on the configured initial route and its ready element is visible.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["miniProgramSession"],
+        "properties": {
+          "miniProgramSession": {
+            "type": "object",
+            "required": ["launched", "pagePath", "readyElementVisible"],
+            "properties": {
+              "launched": { "const": true },
+              "pagePath": { "const": "pages/index/index" },
+              "readyElementVisible": { "const": true }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "initialPath": "/pages/index/index",
+  "readySelector": "#home-title",
+  "expectedText": "RegressionWright Mini Program",
+  "readyTimeoutMs": 15000
+}

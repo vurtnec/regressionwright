@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "page-navigation.regression",
+  "module": "__MODULE_ID__",
+  "stage": "page-navigation",
+  "checks": "regression",
+  "description": "The Settings route is active and its title element is visible.",
+  "outputSchema": {
+    "type": "object",
+    "required": ["state"],
+    "properties": {
+      "state": {
+        "type": "object",
+        "required": ["pageNavigation"],
+        "properties": {
+          "pageNavigation": {
+            "type": "object",
+            "required": ["completed", "pagePath", "readyElementVisible", "readyText"],
+            "properties": {
+              "completed": { "const": true },
+              "pagePath": { "const": "pages/settings/settings" },
+              "readyElementVisible": { "const": true },
+              "readyText": { "const": "Settings" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

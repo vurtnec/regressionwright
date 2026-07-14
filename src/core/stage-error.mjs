@@ -47,7 +47,7 @@ function classifyErrorCode(message, error) {
     return 'VALIDATION_ERROR';
   }
 
-  if (/ENVIRONMENT_ERROR|Executable doesn't exist|playwright install|browserType\.launch|Appium server|Unable to connect|browser driver is running|service failed to start|ECONNREFUSED|XCUITest|WebDriverAgent|session not created|static assets|\/assets\/.*\.js|chunk|CDN/i.test(message)) {
+  if (/ENVIRONMENT_ERROR|Executable doesn't exist|playwright install|browserType\.launch|Appium server|Unable to connect|browser driver is running|service failed to start|ECONNREFUSED|XCUITest|WebDriverAgent|session not created|Wechat web devTools|automation enabled|mini.?program connection|static assets|\/assets\/.*\.js|chunk|CDN/i.test(message)) {
     return 'ENVIRONMENT_ERROR';
   }
 

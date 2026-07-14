@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "module": "__MODULE_ID__",
+  "description": "__MODULE_ID__ Mini Program stage registry.",
+  "stageDefinitions": [
+    "stages/__MODULE_ID__/mini-program-session/default.json",
+    "stages/__MODULE_ID__/page-navigation/open-settings.json"
+  ]
+}

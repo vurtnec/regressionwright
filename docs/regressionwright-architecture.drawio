@@ -94,10 +94,10 @@
         <mxCell id="infra-runner" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeColor=#475569;fillColor=#e2e8f0;fontSize=14;fontStyle=1;fontColor=#1e293b;" value="Harness Runtime&lt;br&gt;&lt;span style=&quot;font-size:11px;font-weight:normal;color:#475569&quot;&gt;stable CLI · stage-runner · data-generator&lt;/span&gt;" vertex="1">
           <mxGeometry height="86" width="320" x="65" y="920" as="geometry" />
         </mxCell>
-        <mxCell id="infra-browser" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeColor=#475569;fillColor=#e2e8f0;fontSize=14;fontStyle=1;fontColor=#1e293b;" value="Execution Runtime&lt;br&gt;&lt;span style=&quot;font-size:11px;font-weight:normal;color:#475569&quot;&gt;Playwright web · Appium native (XCUITest starter)&lt;/span&gt;" vertex="1">
+        <mxCell id="infra-browser" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeColor=#475569;fillColor=#e2e8f0;fontSize=14;fontStyle=1;fontColor=#1e293b;" value="Execution Runtime&lt;br&gt;&lt;span style=&quot;font-size:11px;font-weight:normal;color:#475569&quot;&gt;Playwright web · Appium native · WeChat Mini Program&lt;/span&gt;" vertex="1">
           <mxGeometry height="86" width="320" x="415" y="920" as="geometry" />
         </mxCell>
-        <mxCell id="infra-sut" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeColor=#475569;fillColor=#e2e8f0;fontSize=14;fontStyle=1;fontColor=#1e293b;" value="System Under Test&lt;br&gt;&lt;span style=&quot;font-size:11px;font-weight:normal;color:#475569&quot;&gt;target web apps &amp;amp; APIs&lt;/span&gt;" vertex="1">
+        <mxCell id="infra-sut" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeColor=#475569;fillColor=#e2e8f0;fontSize=14;fontStyle=1;fontColor=#1e293b;" value="System Under Test&lt;br&gt;&lt;span style=&quot;font-size:11px;font-weight:normal;color:#475569&quot;&gt;target web, native, and Mini Program apps&lt;/span&gt;" vertex="1">
           <mxGeometry height="86" width="320" x="765" y="920" as="geometry" />
         </mxCell>
         <mxCell id="infra-tools" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;strokeColor=#0d9488;fillColor=#ccfbf1;fontSize=14;fontStyle=1;fontColor=#134e4a;" value="Tools &amp; Evidence&lt;br&gt;&lt;span style=&quot;font-size:11px;font-weight:normal;color:#475569&quot;&gt;mail · DB · traces · screenshots · logs&lt;/span&gt;" vertex="1">

@@ -1,0 +1,16 @@
+{
+  "id": "open-settings-default",
+  "stage": "page-navigation",
+  "variant": "open-settings",
+  "dataKey": "pageNavigation",
+  "contractPath": "contracts/__MODULE_ID__/open-settings-default.json",
+  "implementationPath": "tests/__MODULE_ID__/stages/open-settings.mjs",
+  "defaultInput": "open-settings",
+  "defaultChecks": "regression",
+  "executor": {
+    "type": "miniprogram",
+    "registryPath": "tests/__MODULE_ID__/pipeline-runner.mjs"
+  },
+  "tags": ["starter", "wechat", "miniprogram", "navigation"],
+  "status": "starter"
+}

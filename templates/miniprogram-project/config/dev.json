@@ -1,0 +1,11 @@
+{
+  "name": "dev",
+  "__MODULE_ID__": {
+    "miniprogram": {
+      "cliPath": "/Applications/wechatwebdevtools.app/Contents/MacOS/cli",
+      "projectPath": "fixtures/miniapp",
+      "launchTimeoutMs": 60000,
+      "trustProject": true
+    }
+  }
+}
