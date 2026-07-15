@@ -1,9 +1,9 @@
 # RegressionWright Packaging
 
-`packages/core` is package-shaped as `@regressionwright/core`.
+`packages/core` is package-shaped as `@vurtnec_/regressionwright`.
 
 Users can consume the harness through a local source checkout with `file:$PWD`,
-a local tarball with `file:<tarball>`, or a future published npm version.
+a local tarball with `file:<tarball>`, or the public npm package.
 The maintainer monorepo can also consume it through `workspace:*` during local
 development.
 
@@ -105,7 +105,7 @@ If you used a different scaffold target, `cd` to that target instead.
 The generated project depends on the local harness source:
 
 ```json
-"@regressionwright/core": "file:/path/to/regressionwright"
+"@vurtnec_/regressionwright": "file:/path/to/regressionwright"
 ```
 
 ### Local Release Demo Mode
@@ -122,7 +122,7 @@ pnpm pack
 2. From the harness source root, scaffold a standalone project from that tarball:
 
 ```bash
-pkg="$PWD/regressionwright-core-0.1.0.tgz"
+pkg="$PWD/vurtnec_-regressionwright-0.1.0.tgz"
 pnpm dlx --package "$pkg" create-regressionwright ../demo-regression-test \
   --module demo \
   --core-package "file:$pkg" \
@@ -142,16 +142,15 @@ pnpm regressionwright run --headed
 The generated project depends on the local tarball:
 
 ```json
-"@regressionwright/core": "file:../regressionwright-core-0.1.0.tgz"
+"@vurtnec_/regressionwright": "file:../vurtnec_-regressionwright-0.1.0.tgz"
 ```
 
-### Future Npm Mode
+### Public Npm Mode
 
-After publishing `@regressionwright/core`, invoke the scaffold binary bundled in
-that package:
+Invoke the scaffold binary bundled with `@vurtnec_/regressionwright`:
 
 ```bash
-pnpm dlx --package @regressionwright/core create-regressionwright my-project-regression-test \
+pnpm dlx --package @vurtnec_/regressionwright create-regressionwright my-project-regression-test \
   --module my-project \
   --integration codex
 cd my-project-regression-test
@@ -161,11 +160,11 @@ pnpm regressionwright registry
 pnpm regressionwright run --headed
 ```
 
-The scaffold adds `@regressionwright/core` as a dev dependency and creates only project-level files. It does not copy `src/core`, generic scripts, or the generic runner into the consuming project.
+The scaffold adds `@vurtnec_/regressionwright` as a dev dependency and creates only project-level files. It does not copy `src/core`, generic scripts, or the generic runner into the consuming project.
 
 `--reporter stagewright` adds `playwright-smart-reporter` and its local
 Playwright configuration only to the consuming project. It does not add a
-reporter dependency to `@regressionwright/core`. The generated configuration
+reporter dependency to `@vurtnec_/regressionwright`. The generated configuration
 keeps cloud upload and managed AI features disabled.
 
 `--integration codex`, `--integration claude`, or `--integration all` installs
@@ -180,7 +179,7 @@ the package-owned skill into project-level folders only:
 
 The package separates two roots:
 
-- `harnessPackageRoot`: package location, normally `node_modules/@regressionwright/core`.
+- `harnessPackageRoot`: package location, normally `node_modules/@vurtnec_/regressionwright`.
 - `consumerProjectRoot`: regression project location, discovered by walking upward to `config/harness.json`.
 
 Package consumers can force the project root with:
@@ -225,7 +224,7 @@ The data generator composes selected stage inputs into `input.json`. Pipeline JS
 The scaffold includes a local Playwright shim at `tests/harness/pipeline-runner.spec.mjs`:
 
 ```js
-import '@regressionwright/core/tests/harness/pipeline-runner.spec.mjs';
+import '@vurtnec_/regressionwright/tests/harness/pipeline-runner.spec.mjs';
 ```
 
 Keep this shim local to the consuming project. Playwright may ignore specs that live directly inside `node_modules`, so the shim gives the project a normal local test entry while keeping the generic runner in the package.

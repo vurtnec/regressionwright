@@ -1,4 +1,4 @@
-import { inputForStage } from '@regressionwright/core/stage-input.mjs';
+import { inputForStage } from '@vurtnec_/regressionwright/stage-input.mjs';
 import { assertElementText, normalizePagePath, waitForElement } from './mini-program-page.mjs';
 
 export async function launchMiniProgramStage({ connect, run, stage }) {

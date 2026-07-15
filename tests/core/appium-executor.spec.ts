@@ -45,9 +45,9 @@ function createAppiumFixture() {
     'workspace:*',
   ], { stdio: 'pipe' });
 
-  const packageLinkDir = path.join(projectRoot, 'node_modules/@regressionwright');
+  const packageLinkDir = path.join(projectRoot, 'node_modules/@vurtnec_');
   fs.mkdirSync(packageLinkDir, { recursive: true });
-  fs.symlinkSync(packageRoot, path.join(packageLinkDir, 'core'), 'dir');
+  fs.symlinkSync(packageRoot, path.join(packageLinkDir, 'regressionwright'), 'dir');
   fs.writeFileSync(
     path.join(projectRoot, 'tests/demo/pipeline-runner.mjs'),
     fakePipelineRunnerSource(),
@@ -59,10 +59,10 @@ function createAppiumFixture() {
 function fakePipelineRunnerSource() {
   return `
 import path from 'node:path';
-import { readHarnessEnv } from '@regressionwright/core/env-vars.mjs';
-import { readJson } from '@regressionwright/core/run-data.mjs';
-import { saveRunContext } from '@regressionwright/core/run-context.mjs';
-import { runStage } from '@regressionwright/core/stage.mjs';
+import { readHarnessEnv } from '@vurtnec_/regressionwright/env-vars.mjs';
+import { readJson } from '@vurtnec_/regressionwright/run-data.mjs';
+import { saveRunContext } from '@vurtnec_/regressionwright/run-context.mjs';
+import { runStage } from '@vurtnec_/regressionwright/stage.mjs';
 
 export async function createPipelineRunner() {
   const runDir = readHarnessEnv('RUN_DIR');

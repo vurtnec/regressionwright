@@ -1,4 +1,4 @@
-import { inputForStage } from '@regressionwright/core/stage-input.mjs';
+import { inputForStage } from '@vurtnec_/regressionwright/stage-input.mjs';
 
 export async function healthCheckStage({ page, run, stage, performance }) {
   const input = inputForStage(run, stage, 'healthCheck');

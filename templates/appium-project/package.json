@@ -16,7 +16,7 @@
     "appium:server": "appium"
   },
   "devDependencies": {
-    "@regressionwright/core": "__CORE_PACKAGE_SPECIFIER__",
+    "@vurtnec_/regressionwright": "__CORE_PACKAGE_SPECIFIER__",
     "@types/node": "^24.0.0",
     "appium": "3.5.2",
     "typescript": "~5.9.3",

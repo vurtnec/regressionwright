@@ -1,7 +1,7 @@
 # __PROJECT_NAME__
 
 WeChat Mini Program E2E regression project generated from
-`@regressionwright/core`.
+`@vurtnec_/regressionwright`.
 
 ## Prerequisites
 

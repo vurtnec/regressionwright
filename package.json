@@ -1,5 +1,5 @@
 {
-  "name": "@regressionwright/core",
+  "name": "@vurtnec_/regressionwright",
   "version": "0.1.0",
   "description": "RegressionWright core for deterministic, stage-based E2E regression pipelines with AI oversight.",
   "license": "MIT",

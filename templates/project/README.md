@@ -1,6 +1,6 @@
 # __PROJECT_NAME__
 
-This is an E2E regression project generated from `@regressionwright/core`.
+This is an E2E regression project generated from `@vurtnec_/regressionwright`.
 
 ## Quick Start
 

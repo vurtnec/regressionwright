@@ -39,7 +39,7 @@ the open-source repository. During local development, point the consuming
 project to a local checkout:
 
 ```json
-"@regressionwright/core": "file:/path/to/regressionwright"
+"@vurtnec_/regressionwright": "file:/path/to/regressionwright"
 ```
 
 For controlled internal rollout, consume a git tag, private package mirror, or
@@ -125,7 +125,7 @@ The generated project owns project-level regression code and references the
 core package with:
 
 ```json
-"@regressionwright/core": "file:/path/to/regressionwright"
+"@vurtnec_/regressionwright": "file:/path/to/regressionwright"
 ```
 
 ### Local Release Demo
@@ -141,7 +141,7 @@ pnpm pack
 2. From the harness source root, scaffold a project from the tarball:
 
 ```bash
-pkg="$PWD/regressionwright-core-0.1.0.tgz"
+pkg="$PWD/vurtnec_-regressionwright-0.1.0.tgz"
 pnpm dlx --package "$pkg" create-regressionwright ../demo-regression-test \
   --module demo \
   --core-package "file:$pkg" \
@@ -160,12 +160,12 @@ pnpm regressionwright run --env dev --site default --headed
 
 The generated project references the local tarball through `file:`.
 
-### Future Npm Mode
+### Public Npm Mode
 
-After `@regressionwright/core` is published, scaffold from its bundled CLI:
+Scaffold from the CLI bundled with `@vurtnec_/regressionwright`:
 
 ```bash
-pnpm dlx --package @regressionwright/core create-regressionwright my-project-regression-test \
+pnpm dlx --package @vurtnec_/regressionwright create-regressionwright my-project-regression-test \
   --module my-project \
   --integration codex
 cd my-project-regression-test
@@ -196,7 +196,7 @@ Project-specific module packs do not live in this package. They depend on this p
 
 Use the `regressionwright` and `create-regressionwright` commands for CLI flows.
 Code-level consumers must import an explicit path listed in `package.json`
-`exports`, such as `@regressionwright/core/run-data.mjs`. Direct imports
+`exports`, such as `@vurtnec_/regressionwright/run-data.mjs`. Direct imports
 from unexported package `src/`, `scripts/`, or `tests/` internals are not
 supported.
 
@@ -291,7 +291,7 @@ The `profiles` authoring helper is not copied into final `input.json`.
 
 ## Runtime Performance
 
-Projects can use `@regressionwright/core/performance-monitor.mjs` to record
+Projects can use `@vurtnec_/regressionwright/performance-monitor.mjs` to record
 runtime measurements during Playwright stages. The monitor is explicit: stage
 code marks `initial-render` and `action` windows around the business waits that
 define "ready".

@@ -1,1 +1,1 @@
-import '@regressionwright/core/tests/harness/pipeline-runner.spec.mjs';
+import '@vurtnec_/regressionwright/tests/harness/pipeline-runner.spec.mjs';

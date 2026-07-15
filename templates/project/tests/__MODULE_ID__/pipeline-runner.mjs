@@ -1,10 +1,10 @@
 import path from 'node:path';
-import { createPlaywrightFailureEvidence } from '@regressionwright/core/evidence.mjs';
-import { createPerformanceMonitor } from '@regressionwright/core/performance-monitor.mjs';
-import { readHarnessEnv } from '@regressionwright/core/env-vars.mjs';
-import { readJson } from '@regressionwright/core/run-data.mjs';
-import { createResumedRunContext, saveRunContext } from '@regressionwright/core/run-context.mjs';
-import { runStage as runHarnessStage } from '@regressionwright/core/stage.mjs';
+import { createPlaywrightFailureEvidence } from '@vurtnec_/regressionwright/evidence.mjs';
+import { createPerformanceMonitor } from '@vurtnec_/regressionwright/performance-monitor.mjs';
+import { readHarnessEnv } from '@vurtnec_/regressionwright/env-vars.mjs';
+import { readJson } from '@vurtnec_/regressionwright/run-data.mjs';
+import { createResumedRunContext, saveRunContext } from '@vurtnec_/regressionwright/run-context.mjs';
+import { runStage as runHarnessStage } from '@vurtnec_/regressionwright/stage.mjs';
 import { healthCheckStage } from './stages/health-check.mjs';
 import { contentCheckStage } from './stages/content-check.mjs';
 import { summaryCheckStage } from './stages/summary-check.mjs';

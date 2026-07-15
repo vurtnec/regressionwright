@@ -334,7 +334,7 @@ function printHelp() {
 Options:
   --module <module-id>        Module id for the starter project pack.
   --package-name <name>       package.json name. Defaults to the directory name.
-  --core-package <spec>       @regressionwright/core dependency specifier. Defaults to ^0.1.0.
+  --core-package <spec>       @vurtnec_/regressionwright dependency specifier. Defaults to ^0.1.0.
   --executor <name>           Runtime executor: playwright (default), appium, or miniprogram.
   --integration <name>        Install project-level AI skill: codex, claude, or all.
   --reporter <name>           Install an optional project reporter: stagewright.

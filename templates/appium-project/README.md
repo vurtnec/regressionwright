@@ -1,6 +1,6 @@
 # __PROJECT_NAME__
 
-iOS E2E regression project generated from `@regressionwright/core` with the
+iOS E2E regression project generated from `@vurtnec_/regressionwright` with the
 Appium executor.
 
 ## Prerequisites

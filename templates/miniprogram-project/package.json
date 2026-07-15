@@ -14,7 +14,7 @@
     "registry": "regressionwright registry"
   },
   "devDependencies": {
-    "@regressionwright/core": "__CORE_PACKAGE_SPECIFIER__",
+    "@vurtnec_/regressionwright": "__CORE_PACKAGE_SPECIFIER__",
     "@types/node": "^24.0.0",
     "miniprogram-automator": "0.12.1",
     "typescript": "~5.9.3"

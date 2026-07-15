@@ -3,7 +3,7 @@ import {
   collectStageInputRefs,
   deepMerge,
   loadStageDataDefaults,
-} from '@regressionwright/core/run-data.mjs';
+} from '@vurtnec_/regressionwright/run-data.mjs';
 
 export function createRegressionInput(params) {
   const stageDefaults = loadStageDataDefaults(params.pipeline, params.stageIds, {

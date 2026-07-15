@@ -20,7 +20,7 @@ Initialization is different: AI may create or modify stage code, run it, inspect
 
 | Executor | Status |
 |---|---|
-| Playwright | Supported in `@regressionwright/core` |
+| Playwright | Supported in `@vurtnec_/regressionwright` |
 | Appium | Supported through the built-in runner; generated iOS projects use the XCUITest driver |
 | Mini Program | Supported through the built-in runner; generated projects use WeChat DevTools automation |
 | Direct XCUITest | Not implemented |
@@ -56,7 +56,7 @@ The generic layer should not contain project business vocabulary.
 - `templates/miniprogram-project/`: standalone WeChat Mini Program project scaffold.
 - `templates/module-pack/`: module-pack extension notes.
 
-These are the generic package files for `@regressionwright/core`.
+These are the generic package files for `@vurtnec_/regressionwright`.
 
 ## Project Root Boundary
 
@@ -174,7 +174,7 @@ Normal runs must enter through the harness CLI so the data node writes `plan.jso
 The generic package includes an optional Playwright performance monitor:
 
 ```js
-import { createPerformanceMonitor } from '@regressionwright/core/performance-monitor.mjs';
+import { createPerformanceMonitor } from '@vurtnec_/regressionwright/performance-monitor.mjs';
 ```
 
 It records explicit measurement windows chosen by project stage code:

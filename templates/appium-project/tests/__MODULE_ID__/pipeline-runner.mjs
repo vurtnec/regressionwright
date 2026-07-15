@@ -1,10 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { remote } from 'webdriverio';
-import { readHarnessEnv } from '@regressionwright/core/env-vars.mjs';
-import { readJson } from '@regressionwright/core/run-data.mjs';
-import { createResumedRunContext, saveRunContext } from '@regressionwright/core/run-context.mjs';
-import { runStage as runHarnessStage } from '@regressionwright/core/stage.mjs';
+import { readHarnessEnv } from '@vurtnec_/regressionwright/env-vars.mjs';
+import { readJson } from '@vurtnec_/regressionwright/run-data.mjs';
+import { createResumedRunContext, saveRunContext } from '@vurtnec_/regressionwright/run-context.mjs';
+import { runStage as runHarnessStage } from '@vurtnec_/regressionwright/stage.mjs';
 import { launchAppStage } from './stages/launch-app.mjs';
 
 const executors = {
