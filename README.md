@@ -141,7 +141,7 @@ pnpm pack
 2. From the harness source root, scaffold a project from the tarball:
 
 ```bash
-pkg="$PWD/vurtnec_-regressionwright-0.1.0.tgz"
+pkg="$PWD/vurtnec_-regressionwright-0.1.1.tgz"
 pnpm dlx --package "$pkg" create-regressionwright ../demo-regression-test \
   --module demo \
   --core-package "file:$pkg" \

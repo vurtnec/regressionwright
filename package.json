@@ -1,6 +1,6 @@
 {
   "name": "@vurtnec_/regressionwright",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "RegressionWright core for deterministic, stage-based E2E regression pipelines with AI oversight.",
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",
@@ -110,12 +110,12 @@
     }
   },
   "dependencies": {
+    "@types/mailparser": "^3.4.6",
     "imapflow": "^1.3.5",
     "mailparser": "^3.9.9"
   },
   "devDependencies": {
     "@playwright/test": "1.60.0",
-    "@types/mailparser": "^3.4.6",
     "@types/node": "^24.0.0",
     "typescript": "~5.9.3"
   }

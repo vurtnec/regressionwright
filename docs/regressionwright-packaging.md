@@ -122,7 +122,7 @@ pnpm pack
 2. From the harness source root, scaffold a standalone project from that tarball:
 
 ```bash
-pkg="$PWD/vurtnec_-regressionwright-0.1.0.tgz"
+pkg="$PWD/vurtnec_-regressionwright-0.1.1.tgz"
 pnpm dlx --package "$pkg" create-regressionwright ../demo-regression-test \
   --module demo \
   --core-package "file:$pkg" \
@@ -142,7 +142,7 @@ pnpm regressionwright run --headed
 The generated project depends on the local tarball:
 
 ```json
-"@vurtnec_/regressionwright": "file:../vurtnec_-regressionwright-0.1.0.tgz"
+"@vurtnec_/regressionwright": "file:../vurtnec_-regressionwright-0.1.1.tgz"
 ```
 
 ### Public Npm Mode
