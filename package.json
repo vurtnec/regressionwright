@@ -1,6 +1,6 @@
 {
   "name": "@vurtnec_/regressionwright",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "RegressionWright core for deterministic, stage-based E2E regression pipelines with AI oversight.",
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",
@@ -54,12 +54,12 @@
     "./stage-error.mjs": "./src/core/stage-error.mjs",
     "./stage-input.mjs": "./src/core/stage-input.mjs",
     "./stage.mjs": "./src/core/stage.mjs",
-    "./env.js": "./src/core/env.ts",
-    "./evidence.js": "./src/core/evidence.ts",
-    "./run-context.js": "./src/core/run-context.ts",
-    "./stage-input.js": "./src/core/stage-input.ts",
-    "./stage.js": "./src/core/stage.ts",
-    "./integrations/mail/gmail.js": "./src/integrations/mail/gmail.ts",
+    "./env.js": "./src/core/env.js",
+    "./evidence.js": "./src/core/evidence.js",
+    "./run-context.js": "./src/core/run-context.js",
+    "./stage-input.js": "./src/core/stage-input.js",
+    "./stage.js": "./src/core/stage.js",
+    "./integrations/mail/gmail.js": "./src/integrations/mail/gmail.js",
     "./tests/harness/pipeline-runner.spec.mjs": "./tests/harness/pipeline-runner.spec.mjs",
     "./package.json": "./package.json"
   },
@@ -90,6 +90,7 @@
   },
   "scripts": {
     "auth": "node bin/regressionwright.mjs auth",
+    "build": "tsc -p tsconfig.build.json",
     "check": "tsc --noEmit",
     "create": "node bin/create-regressionwright.mjs",
     "harness": "node bin/regressionwright.mjs",
@@ -97,6 +98,7 @@
     "pack:check": "node scripts/check-package.mjs",
     "profile": "node bin/regressionwright.mjs profile",
     "playwright:raw": "E2E_REGRESSION_DEV_FALLBACK=1 playwright test",
+    "prepack": "pnpm build",
     "test": "pnpm test:unit",
     "test:unit": "playwright test tests/core tests/integrations",
     "verify": "pnpm check && pnpm test:unit && pnpm pack:check"

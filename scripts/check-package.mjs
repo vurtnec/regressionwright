@@ -21,7 +21,13 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1);
 }
 
-const manifest = JSON.parse(result.stdout);
+const jsonStart = result.stdout.indexOf('{');
+if (jsonStart === -1) {
+  process.stderr.write(`Package audit could not read the pnpm pack manifest.\n${result.stdout}`);
+  process.exit(1);
+}
+
+const manifest = JSON.parse(result.stdout.slice(jsonStart));
 const packedFiles = new Set(manifest.files.map(entry => entry.path));
 const requiredFiles = [
   'LICENSE',
@@ -64,6 +70,9 @@ for (const packedFile of packedFiles) {
 
 for (const target of exportTargets(packageJson.exports)) {
   const packedTarget = target.replace(/^\.\//, '');
+  if (/\.tsx?$/.test(packedTarget)) {
+    errors.push(`runtime export must not expose TypeScript source: ${target}`);
+  }
   if (!packedFiles.has(packedTarget)) {
     errors.push(`export target is not included in the package: ${target}`);
   }

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "noEmit": false,
+    "rootDir": "src"
+  },
+  "include": [
+    "src/core/env.ts",
+    "src/core/evidence.ts",
+    "src/core/run-context.ts",
+    "src/core/stage-input.ts",
+    "src/core/stage.ts",
+    "src/integrations/mail/gmail.ts"
+  ]
+}
